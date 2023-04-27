@@ -1,5 +1,6 @@
 package com.example.miniprojetasedsinpt.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,6 @@ public class Produit {
     private String categorie;
     private String nom;
     @OneToMany
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Prelevement> prelevement;
 }

@@ -1,6 +1,7 @@
 package com.example.miniprojetasedsinpt.entities;
 
 import com.example.miniprojetasedsinpt.entities.utils.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,8 +26,10 @@ public class Prelevement {
     @ManyToOne
     private Produit produit;
     @ManyToOne
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Personne personne;
     @OneToOne(mappedBy = "prelevement")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private ResultatPrelevement resultatPrel;
 
     public Prelevement(Date dateProcesVerbal, int numeroProcesVerbal,

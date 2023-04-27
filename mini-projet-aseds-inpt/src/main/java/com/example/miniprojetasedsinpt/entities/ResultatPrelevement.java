@@ -1,5 +1,6 @@
 package com.example.miniprojetasedsinpt.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ public class ResultatPrelevement {
     private int numeroBA;
     private boolean conforme;
     @ManyToOne
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Personne personne;
     @OneToOne
     private Prelevement prelevement;

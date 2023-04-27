@@ -1,7 +1,6 @@
 package com.example.miniprojetasedsinpt.controllers;
 
 import com.example.miniprojetasedsinpt.controllers.utils.ProduitRequest;
-import com.example.miniprojetasedsinpt.entities.Prelevement;
 import com.example.miniprojetasedsinpt.entities.Produit;
 import com.example.miniprojetasedsinpt.services.ProduitService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/produit")
 public class ProduitController {
-    private ProduitService produitService;
+    private final ProduitService produitService;
 
     @GetMapping
     public List<Produit> getAllProduit() {

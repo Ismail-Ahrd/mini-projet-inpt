@@ -22,7 +22,7 @@ public class MiniProjetAsedsInptApplication {
 			PersonneService personneService
 	) {
 		return args -> {
-			Stream.of("Hassan","Ahmed", "Najat")
+			/*Stream.of("Hassan","Ahmed", "Najat")
 					.forEach(name -> {
 						Personne p = new Personne();
 						p.setPrenom(name);
@@ -31,7 +31,7 @@ public class MiniProjetAsedsInptApplication {
 						p.setMdp("123456");
 						p.setType(TypePersonne.AGENT_CONTROLE);
 						personneService.savePersonne(p);
-					});
+					});*/
 
 		};
 	}

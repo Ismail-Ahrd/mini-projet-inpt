@@ -1,5 +1,6 @@
 package com.example.miniprojetasedsinpt.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,6 @@ public class DetailNonConformite {
     private String numeroTA;
     private String detail;
     @OneToOne
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private ResultatPrelevement resultatPrel;
 }
