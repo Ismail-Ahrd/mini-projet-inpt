@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ResultatPrelevementService {
 
-    void saveResultatPrelevement(ResultatPrelevement resultatPrelevement);
+    ResultatPrelevement saveResultatPrelevement(ResultatPrelevement resultatPrelevement);
     ResultatPrelevement getResultatPrelevement(Long id);
     void deleteResultatPrelevement(long id);
     List<ResultatPrelevement> getAllResultatPrelevement();

@@ -15,7 +15,7 @@ public class ResultatPrelevement {
     private Long id;
     private Date dateBA;
     private int numeroBA;
-    private Boolean conforme;
+    private boolean conforme;
     @ManyToOne
     private Personne personne;
     @OneToOne

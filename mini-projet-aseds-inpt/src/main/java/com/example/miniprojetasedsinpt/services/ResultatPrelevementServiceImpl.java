@@ -1,5 +1,6 @@
 package com.example.miniprojetasedsinpt.services;
 
+import com.example.miniprojetasedsinpt.entities.Prelevement;
 import com.example.miniprojetasedsinpt.entities.ResultatPrelevement;
 import com.example.miniprojetasedsinpt.repositories.ResultatPrelevementRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,13 +11,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@RequestMapping("/resultatPrelevement")
 public class ResultatPrelevementServiceImpl implements ResultatPrelevementService {
     private final ResultatPrelevementRepository resultatPrelevementRepository;
 
     @Override
-    public void saveResultatPrelevement(ResultatPrelevement resultatPrelevement) {
-        resultatPrelevementRepository.save(resultatPrelevement);
+    public ResultatPrelevement saveResultatPrelevement(ResultatPrelevement resultatPrelevement) {
+        return resultatPrelevementRepository.save(resultatPrelevement);
     }
 
     @Override

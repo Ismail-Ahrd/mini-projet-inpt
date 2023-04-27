@@ -10,13 +10,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@RequestMapping("/personnes")
 public class PrelevementServiceImpl implements PrelevementService {
     private final PrelevementRepository prelevementrepository;
 
     @Override
-    public void savePrelevement(Prelevement prelevement) {
-        prelevementrepository.save(prelevement);
+    public Prelevement savePrelevement(Prelevement prelevement) {
+        return prelevementrepository.save(prelevement);
     }
 
     @Override
