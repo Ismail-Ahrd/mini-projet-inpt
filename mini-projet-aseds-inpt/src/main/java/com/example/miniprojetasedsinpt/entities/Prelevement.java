@@ -1,9 +1,6 @@
 package com.example.miniprojetasedsinpt.entities;
 
-import com.example.miniprojetasedsinpt.entities.utils.Cadre;
-import com.example.miniprojetasedsinpt.entities.utils.Labo;
-import com.example.miniprojetasedsinpt.entities.utils.Niveau;
-import com.example.miniprojetasedsinpt.entities.utils.TypePrelevement;
+import com.example.miniprojetasedsinpt.entities.utils.*;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,11 +21,26 @@ public class Prelevement {
     private Niveau niveauPrel;
     private Labo laboDestination;
     private Date dateEnvoie;
-    private String etatAvancement;
+    private EtatAvancement etatAvancement;
     @ManyToOne
     private Produit produit;
     @ManyToOne
     private Personne personne;
-    @OneToOne
+    @OneToOne(mappedBy = "prelevement")
     private ResultatPrelevement resultatPrel;
+
+    public Prelevement(Date dateProcesVerbal, int numeroProcesVerbal,
+                       TypePrelevement typePrelevement, Cadre cadreControle,
+                       Niveau niveauPrel, Labo laboDestination,
+                       Date dateEnvoie, EtatAvancement etatAvancement
+    ) {
+        this.dateProcesVerbal = dateProcesVerbal;
+        this.numeroProcesVerbal = numeroProcesVerbal;
+        this.typePrelevement = typePrelevement;
+        this.cadreControle = cadreControle;
+        this.niveauPrel = niveauPrel;
+        this.laboDestination = laboDestination;
+        this.dateEnvoie = dateEnvoie;
+        this.etatAvancement = etatAvancement;
+    }
 }

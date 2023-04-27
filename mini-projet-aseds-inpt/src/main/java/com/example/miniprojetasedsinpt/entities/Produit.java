@@ -13,9 +13,9 @@ public class Produit {
     @Id
     @GeneratedValue
     @Column
-    private Long idproduit;
-    private String Categorie;
-    private String Nom;
+    private Long id;
+    private String categorie;
+    private String nom;
     @OneToMany
     private List<Prelevement> prelevement;
 }

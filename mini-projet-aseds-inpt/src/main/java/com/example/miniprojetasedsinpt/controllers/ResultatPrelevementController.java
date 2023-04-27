@@ -3,12 +3,11 @@ package com.example.miniprojetasedsinpt.controllers;
 import com.example.miniprojetasedsinpt.entities.ResultatPrelevement;
 import com.example.miniprojetasedsinpt.services.ResultatPrelevementService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Service
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/resultatPrelevement")
 public class ResultatPrelevementController {

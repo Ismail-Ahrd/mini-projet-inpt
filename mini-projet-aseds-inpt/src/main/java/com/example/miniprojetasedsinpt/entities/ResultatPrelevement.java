@@ -18,7 +18,7 @@ public class ResultatPrelevement {
     private Boolean conforme;
     @ManyToOne
     private Personne personne;
-    @OneToOne(mappedBy = "resultatPrel")
+    @OneToOne
     private Prelevement prelevement;
     @OneToOne(mappedBy = "resultatPrel")
     private DetailNonConformite detailNonConformite;

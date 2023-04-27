@@ -16,12 +16,7 @@ public class ResultatPrelevementServiceImpl implements ResultatPrelevementServic
 
     @Override
     public void saveResultatPrelevement(ResultatPrelevement resultatPrelevement) {
-        if(resultatPrelevementRepository.findById(resultatPrelevement.getId())!=null) {
-            throw new IllegalArgumentException("Ce resultt de prelevement est déjà enregistré");
-        }
-        else {
-            resultatPrelevementRepository.save(resultatPrelevement);
-        }
+        resultatPrelevementRepository.save(resultatPrelevement);
     }
 
     @Override
