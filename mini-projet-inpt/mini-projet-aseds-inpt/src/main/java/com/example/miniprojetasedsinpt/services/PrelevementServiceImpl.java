@@ -23,12 +23,12 @@ public class PrelevementServiceImpl implements PrelevementService {
 	}
 
 	@Override
-    public void savePrelevement(Prelevement prelevement) {
-        if(prelevementrepository.findById(prelevement.getId())!=null) {
+    public Prelevement savePrelevement(Prelevement prelevement) {
+        if(prelevement.getId()!=null) {
             throw new IllegalArgumentException("Ce prelevement est déjà enregistré");
         }
         else {
-            prelevementrepository.save(prelevement);
+           return prelevementrepository.save(prelevement);
         }
     }
 

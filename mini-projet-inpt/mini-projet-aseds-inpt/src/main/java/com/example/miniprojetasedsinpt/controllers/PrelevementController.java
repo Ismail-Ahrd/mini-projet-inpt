@@ -2,6 +2,11 @@ package com.example.miniprojetasedsinpt.controllers;
 
 import com.example.miniprojetasedsinpt.controllers.utils.PrelevementRequest;
 import com.example.miniprojetasedsinpt.entities.Prelevement;
+import com.example.miniprojetasedsinpt.entities.utils.Cadre;
+import com.example.miniprojetasedsinpt.entities.utils.EtatAvancement;
+import com.example.miniprojetasedsinpt.entities.utils.Labo;
+import com.example.miniprojetasedsinpt.entities.utils.Niveau;
+import com.example.miniprojetasedsinpt.entities.utils.TypePrelevement;
 import com.example.miniprojetasedsinpt.services.PersonneService;
 import com.example.miniprojetasedsinpt.services.PrelevementService;
 import com.example.miniprojetasedsinpt.services.ProduitService;
@@ -33,35 +38,33 @@ public class PrelevementController {
         return prelevementSrevice.getAllPrelevement();
     }
 
-    @GetMapping("/{id}")
-    public Prelevement getPrelevement(@PathVariable Long id) {
-        return 	prelevementSrevice.getPrelevement(id);
-
-    }
+ 
     @PostMapping
-    public void save( 
-        @RequestBody PrelevementRequest prelevementRequest) {
+    public Prelevement save( @RequestBody PrelevementRequest prelevementRequest) {
             Prelevement prelevement = new Prelevement();
-            prelevement.setTypePrelevement(prelevementRequest.getTypePrelevement());
-            prelevement.setCadreControle(prelevementRequest.getCadreControle());
+            prelevement.setTypePrelevement(TypePrelevement.valueOf(prelevementRequest.getTypePrelevement()));
+            prelevement.setCadreControle( Cadre.valueOf(prelevementRequest.getCadreControle()) );
             prelevement.setDateEnvoie(prelevementRequest.getDateEnvoie());
             prelevement.setDateProcesVerbal(prelevementRequest.getDateProcesVerbal());
             prelevement.setNumeroProcesVerbal(prelevementRequest.getNumeroProcesVerbal());
-            prelevement.setEtatAvancement(prelevementRequest.getEtatAvancement());
-            prelevement.setLaboDestination(prelevementRequest.getLaboDestination());
-            prelevement.setNiveauPrel(prelevementRequest.getNiveauPrel());
+            prelevement.setEtatAvancement(  EtatAvancement.valueOf(prelevementRequest.getEtatAvancement()) );
+            prelevement.setLaboDestination(Labo.valueOf(prelevementRequest.getLaboDestination()) );
+            prelevement.setNiveauPrel(Niveau.valueOf(prelevementRequest.getNiveauPrel()) );
             prelevement.setPersonne(
                     personneService.getPersonne(prelevementRequest.getIdPersonne()));
             prelevement.setProduit(
                     produitService.getProduit(prelevementRequest.getIdProduit()));
 
-           prelevementSrevice.savePrelevement(prelevement);
+          return prelevementSrevice.savePrelevement(prelevement);
  
     }
-   @GetMapping("personne/{id}")
+   @GetMapping("/{id}")
    public List<Prelevement> getPrelevementbyPersonne(@PathVariable Long id) {
        return 	prelevementSrevice.getAllprelevementBypersonne(id);
 
    }
-
+   @DeleteMapping("/{id}")
+   public void delete(@PathVariable Long id) {
+	   prelevementSrevice.deletePrelevement(id);
+   }
 }

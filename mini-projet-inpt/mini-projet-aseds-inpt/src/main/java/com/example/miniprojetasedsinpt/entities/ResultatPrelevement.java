@@ -25,15 +25,5 @@ public class ResultatPrelevement {
     private Prelevement prelevement;
     @OneToOne(mappedBy = "resultatPrel")
     private DetailNonConformite detailNonConformite;
-	public ResultatPrelevement(Date dateBA, int numeroBA, Boolean conforme, Personne personne, Prelevement prelevement,
-			DetailNonConformite detailNonConformite) {
-		super();
-		this.dateBA = dateBA;
-		this.numeroBA = numeroBA;
-		this.conforme = conforme;
-		this.personne = personne;
-		this.prelevement = prelevement;
-		this.detailNonConformite = detailNonConformite;
-	}
 
 }

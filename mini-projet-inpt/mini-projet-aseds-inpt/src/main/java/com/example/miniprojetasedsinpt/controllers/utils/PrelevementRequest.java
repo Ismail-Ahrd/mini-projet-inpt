@@ -13,12 +13,12 @@ import lombok.Data;
 public class PrelevementRequest {
 	private Date dateProcesVerbal;
     private int numeroProcesVerbal;
-    private TypePrelevement typePrelevement;
-    private Cadre cadreControle;
-    private Niveau niveauPrel;
-    private Labo laboDestination;
+    private String typePrelevement;
+    private String cadreControle;
+    private String niveauPrel;
+    private String laboDestination;
     private Date dateEnvoie;
-    private EtatAvancement etatAvancement;
+    private String etatAvancement;
     private Long idPersonne;
     private Long idProduit;
 }

@@ -37,22 +37,7 @@ public class Prelevement {
     @OneToOne(mappedBy="prelevement")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private ResultatPrelevement resultatPrel;
-	public Prelevement(Date dateProcesVerbal, int numeroProcesVerbal, TypePrelevement typePrelevement,
-			Cadre cadreControle, Niveau niveauPrel, Labo laboDestination, Date dateEnvoie, EtatAvancement etatAvancement,
-			Produit produit, Personne personne, ResultatPrelevement resultatPrel) {
-		this.dateProcesVerbal = dateProcesVerbal;
-		this.numeroProcesVerbal = numeroProcesVerbal;
-		this.typePrelevement = typePrelevement;
-		this.cadreControle = cadreControle;
-		this.niveauPrel = niveauPrel;
-		this.laboDestination = laboDestination;
-		this.dateEnvoie = dateEnvoie;
-		this.etatAvancement = etatAvancement;
-		this.produit = produit;
-		this.personne = personne;
-		this.resultatPrel = resultatPrel;
-	}
-
+	
 
 
 
