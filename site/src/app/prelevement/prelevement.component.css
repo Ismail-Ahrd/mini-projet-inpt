@@ -1,0 +1,17 @@
+.header{
+    padding-top: 3rem;
+    display: flex;
+    justify-content:center;
+    font-weight: bold;
+    font-size: 25px;
+
+
+}
+@media(max-width:700px){
+.header{
+    display: flex;
+    
+    
+}
+    
+}
