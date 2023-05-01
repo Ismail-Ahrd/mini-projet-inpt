@@ -1,14 +1,13 @@
 package com.example.miniprojetasedsinpt.services;
 
-import com.example.miniprojetasedsinpt.entities.Produit;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.example.miniprojetasedsinpt.dtos.ProduitDTO;
+import com.example.miniprojetasedsinpt.exceptions.ProduitNotFoundException;
 
 import java.util.List;
 
 public interface ProduitService {
 
-    Produit saveProduit(Produit produit);
-    Produit getProduit(Long id);
-    List<Produit> getAllProduit();
+    ProduitDTO saveProduit(ProduitDTO produitDTO);
+    ProduitDTO getProduit(Long id) throws ProduitNotFoundException;
+    List<ProduitDTO> getAllProduit();
 }

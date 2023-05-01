@@ -1,7 +1,7 @@
 package com.example.miniprojetasedsinpt.controllers;
 
-import com.example.miniprojetasedsinpt.controllers.utils.ProduitRequest;
-import com.example.miniprojetasedsinpt.entities.Produit;
+import com.example.miniprojetasedsinpt.dtos.ProduitDTO;
+import com.example.miniprojetasedsinpt.exceptions.ProduitNotFoundException;
 import com.example.miniprojetasedsinpt.services.ProduitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -14,21 +14,20 @@ import java.util.List;
 public class ProduitController {
     private final ProduitService produitService;
 
+
     @GetMapping
-    public List<Produit> getAllProduit() {
+    public List<ProduitDTO> getAllProduit() {
         return produitService.getAllProduit();
     }
 
     @GetMapping("/{id}")
-    public Produit getPrelevement(@PathVariable Long id) {
+    public ProduitDTO getPrelevement(@PathVariable Long id) throws ProduitNotFoundException {
         return 	produitService.getProduit(id);
     }
 
     @PostMapping
-    public Produit saveProduit(@RequestBody ProduitRequest produitRequest){
-        Produit produit = new Produit();
-        produit.setNom(produitRequest.getNom());
-        produit.setCategorie(produitRequest.getCategorie());
-        return produitService.saveProduit(produit);
+    public ProduitDTO saveProduit(@RequestBody ProduitDTO produitDTO) {
+        return produitService.saveProduit(produitDTO);
     }
+
 }

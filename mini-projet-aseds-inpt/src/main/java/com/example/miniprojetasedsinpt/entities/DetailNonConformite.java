@@ -18,6 +18,6 @@ public class DetailNonConformite {
     private String numeroTA;
     private String detail;
     @OneToOne
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private ResultatPrelevement resultatPrel;
 }

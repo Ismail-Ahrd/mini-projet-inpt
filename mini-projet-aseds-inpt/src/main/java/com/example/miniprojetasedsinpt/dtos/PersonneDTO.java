@@ -1,10 +1,11 @@
-package com.example.miniprojetasedsinpt.controllers.utils;
+package com.example.miniprojetasedsinpt.dtos;
 
 import com.example.miniprojetasedsinpt.entities.utils.TypePersonne;
 import lombok.Data;
 
 @Data
-public class PersonneRequest {
+public class PersonneDTO {
+    private Long id;
     private String nom;
     private String prenom;
     private String email;

@@ -1,13 +1,12 @@
-package com.example.miniprojetasedsinpt.controllers.utils;
+package com.example.miniprojetasedsinpt.dtos;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
-public class ResultatPrelevementRequest {
+public class ResultatPrelevementDTO {
+    private Long id;
     private Date dateBA;
     private int numeroBA;
     private boolean conforme;

@@ -1,7 +1,10 @@
 package com.example.miniprojetasedsinpt.controllers;
 
-import com.example.miniprojetasedsinpt.controllers.utils.ResultatPrelevementRequest;
-import com.example.miniprojetasedsinpt.entities.ResultatPrelevement;
+import com.example.miniprojetasedsinpt.dtos.ResultatPrelevementDTO;
+import com.example.miniprojetasedsinpt.exceptions.PersonneNotFoundException;
+import com.example.miniprojetasedsinpt.exceptions.PrelevementNotFoundException;
+import com.example.miniprojetasedsinpt.exceptions.ProduitNotFoundException;
+import com.example.miniprojetasedsinpt.exceptions.ResultatNotFoundException;
 import com.example.miniprojetasedsinpt.services.PersonneService;
 import com.example.miniprojetasedsinpt.services.PrelevementService;
 import com.example.miniprojetasedsinpt.services.ResultatPrelevementService;
@@ -19,29 +22,23 @@ public class ResultatPrelevementController {
     private final PrelevementService prelevementService;
 
     @GetMapping
-    public List<ResultatPrelevement> getAllPrelevement() {
+    public List<ResultatPrelevementDTO> getAllPrelevement() {
         return resultatPrelevementService.getAllResultatPrelevement();
     }
 
     @GetMapping("/{id}")
-    public ResultatPrelevement getPrelevement(@PathVariable Long id) {
+    public ResultatPrelevementDTO getPrelevement(@PathVariable Long id)
+            throws ResultatNotFoundException
+    {
         return 	resultatPrelevementService.getResultatPrelevement(id);
-
     }
 
     @PostMapping
-    public ResultatPrelevement saveResultatPrelevement(
-            @RequestBody ResultatPrelevementRequest resultatPrelevementRequest
-    ) {
-        ResultatPrelevement resultatPrelevement = new ResultatPrelevement();
-        resultatPrelevement.setConforme(resultatPrelevementRequest.isConforme());
-        resultatPrelevement.setDateBA(resultatPrelevementRequest.getDateBA());
-        resultatPrelevement.setNumeroBA(resultatPrelevementRequest.getNumeroBA());
-        resultatPrelevement.setPersonne(
-                personneService.getPersonne(resultatPrelevementRequest.getIdPersonne()));
-        resultatPrelevement.setPrelevement(
-                prelevementService.getPrelevement(resultatPrelevementRequest.getIdPrelevement()));
-        return resultatPrelevementService.saveResultatPrelevement(resultatPrelevement);
+    public ResultatPrelevementDTO saveResultatPrelevement(
+            @RequestBody ResultatPrelevementDTO resultatPrelevementDTO
+    ) throws PersonneNotFoundException, ProduitNotFoundException, PrelevementNotFoundException
+    {
+        return resultatPrelevementService.saveResultatPrelevement(resultatPrelevementDTO);
     }
 
 }

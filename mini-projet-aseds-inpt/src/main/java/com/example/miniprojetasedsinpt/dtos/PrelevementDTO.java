@@ -1,13 +1,13 @@
-package com.example.miniprojetasedsinpt.controllers.utils;
+package com.example.miniprojetasedsinpt.dtos;
 
 import com.example.miniprojetasedsinpt.entities.utils.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-public class PrelevementRequest {
+public class PrelevementDTO {
+    private Long id;
     private Date dateProcesVerbal;
     private int numeroProcesVerbal;
     private TypePrelevement typePrelevement;

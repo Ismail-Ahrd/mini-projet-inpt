@@ -1,7 +1,7 @@
 package com.example.miniprojetasedsinpt.controllers;
 
-import com.example.miniprojetasedsinpt.controllers.utils.DetailNonConformiteRequest;
-import com.example.miniprojetasedsinpt.entities.DetailNonConformite;
+import com.example.miniprojetasedsinpt.dtos.DetailNonConformiteDTO;
+import com.example.miniprojetasedsinpt.exceptions.*;
 import com.example.miniprojetasedsinpt.services.DetailNonConformiteService;
 import com.example.miniprojetasedsinpt.services.ResultatPrelevementService;
 import lombok.RequiredArgsConstructor;
@@ -15,27 +15,22 @@ import java.util.List;
 public class DetailNonConformiteController {
     private final DetailNonConformiteService detailNonConformiteService;
     private final ResultatPrelevementService resultatPrelevementService;
-
     @GetMapping
-    public List<DetailNonConformite> getAllDetails() {
+    public List<DetailNonConformiteDTO> getAllDetails() {
         return detailNonConformiteService.getAllDetails();
     }
 
     @GetMapping("/{id}")
-    public DetailNonConformite getDetail(@PathVariable Long id) {
+    public DetailNonConformiteDTO getDetail(@PathVariable Long id) throws DetailNotFoundException {
         return 	detailNonConformiteService.getDetail(id);
     }
 
     @PostMapping
-    public DetailNonConformite saeDetail( @RequestBody DetailNonConformiteRequest detailRequest ) {
-        DetailNonConformite detailNonConformite = new DetailNonConformite();
-        detailNonConformite.setDetail(detailRequest.getDetail());
-        detailNonConformite.setDateTA(detailRequest.getDateTA());
-        detailNonConformite.setNumeroTA(detailRequest.getNumeroTA());
-        detailNonConformite.setResultatPrel(
-                resultatPrelevementService.getResultatPrelevement(detailRequest.getIdResultat()));
-
-        return detailNonConformiteService.saveDetail(detailNonConformite);
+    public DetailNonConformiteDTO saveDetail(@RequestBody DetailNonConformiteDTO detailNonConformiteDTO)
+            throws ResultatNotFoundException, PersonneNotFoundException,
+            ProduitNotFoundException, PrelevementNotFoundException
+    {
+        return detailNonConformiteService.saveDetail(detailNonConformiteDTO);
     }
 
 }

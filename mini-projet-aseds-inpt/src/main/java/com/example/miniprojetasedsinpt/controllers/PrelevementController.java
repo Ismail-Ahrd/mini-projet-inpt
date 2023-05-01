@@ -1,7 +1,9 @@
 package com.example.miniprojetasedsinpt.controllers;
 
-import com.example.miniprojetasedsinpt.controllers.utils.PrelevementRequest;
-import com.example.miniprojetasedsinpt.entities.Prelevement;
+import com.example.miniprojetasedsinpt.dtos.PrelevementDTO;
+import com.example.miniprojetasedsinpt.exceptions.PersonneNotFoundException;
+import com.example.miniprojetasedsinpt.exceptions.PrelevementNotFoundException;
+import com.example.miniprojetasedsinpt.exceptions.ProduitNotFoundException;
 import com.example.miniprojetasedsinpt.services.PersonneService;
 import com.example.miniprojetasedsinpt.services.PrelevementService;
 import com.example.miniprojetasedsinpt.services.ProduitService;
@@ -19,32 +21,29 @@ public class PrelevementController {
     private final ProduitService produitService;
 
     @GetMapping
-    public List<Prelevement> getAllPrelevement() {
+    public List<PrelevementDTO> getAllPrelevement() {
         return prelevementSrevice.getAllPrelevement();
     }
 
     @GetMapping("/{id}")
-    public Prelevement getPrelevement(@PathVariable Long id) {
-        return 	prelevementSrevice.getPrelevement(id);
+    public PrelevementDTO getPrelevement(@PathVariable Long id)
+            throws PrelevementNotFoundException {
+        return prelevementSrevice.getPrelevement(id);
 
     }
-    @PostMapping
-    public Prelevement savePrelevement( @RequestBody PrelevementRequest prelevementRequest) {
-        Prelevement prelevement = new Prelevement();
-        prelevement.setTypePrelevement(prelevementRequest.getTypePrelevement());
-        prelevement.setCadreControle(prelevementRequest.getCadreControle());
-        prelevement.setDateEnvoie(prelevementRequest.getDateEnvoie());
-        prelevement.setDateProcesVerbal(prelevementRequest.getDateProcesVerbal());
-        prelevement.setNumeroProcesVerbal(prelevementRequest.getNumeroProcesVerbal());
-        prelevement.setEtatAvancement(prelevementRequest.getEtatAvancement());
-        prelevement.setLaboDestination(prelevementRequest.getLaboDestination());
-        prelevement.setNiveauPrel(prelevementRequest.getNiveauPrel());
-        prelevement.setPersonne(
-                personneService.getPersonne(prelevementRequest.getIdPersonne()));
-        prelevement.setProduit(
-                produitService.getProduit(prelevementRequest.getIdProduit()));
 
-        return prelevementSrevice.savePrelevement(prelevement);
+    @PostMapping
+    public PrelevementDTO savePrelevement(@RequestBody PrelevementDTO prelevementDTO)
+            throws PersonneNotFoundException, ProduitNotFoundException
+    {
+        return prelevementSrevice.savePrelevement(prelevementDTO);
+    }
+
+    @GetMapping("/personne/{idPersonne}")
+    public List<PrelevementDTO> getAllPrelevementByPersonne(@PathVariable Long idPersonne) throws
+            PersonneNotFoundException
+    {
+        return prelevementSrevice.getAllPrelevementByPersonne(idPersonne);
     }
 
 }

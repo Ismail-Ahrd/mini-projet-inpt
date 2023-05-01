@@ -12,12 +12,12 @@ import java.util.List;
 @NoArgsConstructor
 public class Produit {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long id;
     private String categorie;
     private String nom;
     @OneToMany
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    //@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Prelevement> prelevement;
 }

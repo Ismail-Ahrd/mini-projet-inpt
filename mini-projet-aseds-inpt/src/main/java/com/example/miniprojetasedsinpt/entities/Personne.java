@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -21,8 +22,8 @@ public class Personne {
     private TypePersonne type;
     @OneToMany(mappedBy = "personne")
     private List<Prelevement> prelevements;
-    @OneToMany(mappedBy = "personne")
-    private List<ResultatPrelevement> resultats;
+    @OneToMany(mappedBy = "personne", fetch = FetchType.EAGER)
+    private List<ResultatPrelevement> resultats = new ArrayList<>();
 
     public Personne(String nom, String prenom, String email, String mdp,
             TypePersonne type)
