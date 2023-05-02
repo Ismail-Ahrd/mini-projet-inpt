@@ -1,28 +1,29 @@
 package com.example.miniprojetasedsinpt.controllers;
 
 import com.example.miniprojetasedsinpt.dtos.PrelevementDTO;
+import com.example.miniprojetasedsinpt.dtos.PrelevementResponseDTO;
 import com.example.miniprojetasedsinpt.exceptions.PersonneNotFoundException;
 import com.example.miniprojetasedsinpt.exceptions.PrelevementNotFoundException;
 import com.example.miniprojetasedsinpt.exceptions.ProduitNotFoundException;
-import com.example.miniprojetasedsinpt.services.PersonneService;
 import com.example.miniprojetasedsinpt.services.PrelevementService;
-import com.example.miniprojetasedsinpt.services.ProduitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/prelevement")
+@CrossOrigin("*")
 public class PrelevementController {
     private final PrelevementService prelevementSrevice;
-    private final PersonneService personneService;
-    private final ProduitService produitService;
 
-    @GetMapping
-    public List<PrelevementDTO> getAllPrelevement() {
-        return prelevementSrevice.getAllPrelevement();
+    @GetMapping()
+    public PrelevementResponseDTO getAllPrelevement(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "keyword", defaultValue = "") String keyword
+    ) {
+        return prelevementSrevice.getAllPrelevement(keyword, page, size);
     }
 
     @GetMapping("/{id}")
@@ -40,10 +41,18 @@ public class PrelevementController {
     }
 
     @GetMapping("/personne/{idPersonne}")
-    public List<PrelevementDTO> getAllPrelevementByPersonne(@PathVariable Long idPersonne) throws
-            PersonneNotFoundException
+    public PrelevementResponseDTO getAllPrelevementByPersonne(
+            @PathVariable Long idPersonne,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size) throws PersonneNotFoundException
     {
-        return prelevementSrevice.getAllPrelevementByPersonne(idPersonne);
+        return prelevementSrevice.getAllPrelevementByPersonne(idPersonne, page, size);
     }
+
+    @DeleteMapping("{id}")
+    public void deletePrelevement(@PathVariable int id) throws PrelevementNotFoundException {
+        prelevementSrevice.deletePrelevement(id);
+    }
+
 
 }

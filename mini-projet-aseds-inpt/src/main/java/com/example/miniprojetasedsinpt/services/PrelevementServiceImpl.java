@@ -2,16 +2,24 @@ package com.example.miniprojetasedsinpt.services;
 
 import com.example.miniprojetasedsinpt.dtos.PersonneDTO;
 import com.example.miniprojetasedsinpt.dtos.PrelevementDTO;
+import com.example.miniprojetasedsinpt.dtos.PrelevementResponseDTO;
+import com.example.miniprojetasedsinpt.dtos.ProduitDTO;
 import com.example.miniprojetasedsinpt.entities.Personne;
 import com.example.miniprojetasedsinpt.entities.Prelevement;
+import com.example.miniprojetasedsinpt.entities.Produit;
 import com.example.miniprojetasedsinpt.exceptions.PersonneNotFoundException;
 import com.example.miniprojetasedsinpt.exceptions.PrelevementNotFoundException;
 import com.example.miniprojetasedsinpt.exceptions.ProduitNotFoundException;
 import com.example.miniprojetasedsinpt.mappers.PersonneMapper;
 import com.example.miniprojetasedsinpt.mappers.PrelevementMapper;
+import com.example.miniprojetasedsinpt.mappers.ProduitMapper;
 import com.example.miniprojetasedsinpt.repositories.PersonneRepository;
 import com.example.miniprojetasedsinpt.repositories.PrelevementRepository;
+import com.example.miniprojetasedsinpt.repositories.ProduitRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,20 +27,22 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PrelevementServiceImpl implements PrelevementService {
     private final PrelevementRepository prelevementrepository;
     private final PrelevementMapper prelevementMapper;
     private final PersonneService personneService;
     private final PersonneMapper personneMapper;
-    private final PersonneRepository personneRepository;
+    private final ProduitMapper produitMapper;
+    private final ProduitService produitService;
 
     @Override
-    public PrelevementDTO savePrelevement(PrelevementDTO prelevementDTO) throws PersonneNotFoundException, ProduitNotFoundException {
+    public PrelevementDTO savePrelevement(PrelevementDTO prelevementDTO)
+            throws PersonneNotFoundException, ProduitNotFoundException {
+        ProduitDTO savedProduitDTO = produitService.saveProduit(prelevementDTO.getProduitDTO());
+        //log.info(String.valueOf(savedProduitDTO.getId()));
         Prelevement prelevement = prelevementMapper.fromPrelevementDTO(prelevementDTO);
-        /*PersonneDTO personneDTO = personneService.getPersonne(prelevementDTO.getIdPersonne());
-        Personne personne = personneMapper.fromPersonneDTO(personneDTO);
-        personne.getPrelevements().add(prelevement);
-        personneRepository.save(personne);*/
+        prelevement.setProduit(produitMapper.fromProduitDTO(savedProduitDTO));
         Prelevement savedPrelevement = prelevementrepository.save(prelevement);
         return prelevementMapper.fromPrelevement(savedPrelevement);
     }
@@ -51,27 +61,45 @@ public class PrelevementServiceImpl implements PrelevementService {
         prelevementrepository.deleteById(id);
     }
 
+
     @Override
-    public List<PrelevementDTO> getAllPrelevement() {
-        List<Prelevement> prelevements = prelevementrepository.findAll();
+    public PrelevementResponseDTO getAllPrelevement(String kw, int page, int size) {
+        Page<Prelevement> prelevementPages = prelevementrepository.findByProduitNomContains(kw, PageRequest.of(page, size));
+        List<Prelevement> prelevements = prelevementPages.stream().toList();
+
         List<PrelevementDTO> prelevementDTOS = prelevements.stream()
                 .map(prelevement -> prelevementMapper.fromPrelevement(prelevement))
                 .collect(Collectors.toList());
-        return prelevementDTOS;
+
+        PrelevementResponseDTO prelevementResponseDTO = new PrelevementResponseDTO();
+        prelevementResponseDTO.setPrelevementDTOS(prelevementDTOS);
+        prelevementResponseDTO.setCurrentPage(page);
+        prelevementResponseDTO.setTotalPages(prelevementPages.getTotalPages());
+        prelevementResponseDTO.setPageSize(prelevementPages.getSize());
+
+        return prelevementResponseDTO;
     }
 
     @Override
-    public List<PrelevementDTO> getAllPrelevementByPersonne(Long idPersonne)
+    public PrelevementResponseDTO getAllPrelevementByPersonne(Long idPersonne, int page, int size)
             throws PersonneNotFoundException {
+
         PersonneDTO personneDTO = personneService.getPersonne(idPersonne);
         Personne personne = personneMapper.fromPersonneDTO(personneDTO);
-        /*List<PrelevementDTO> prelevementDTOS = personne.getPrelevements().stream()
-                .map(prelevement -> prelevementMapper.fromPrelevement(prelevement))
-                .collect(Collectors.toList());*/
-        List<Prelevement> prelevements = prelevementrepository.findByPersonne(personne);
-        List<PrelevementDTO> prelevementDTOS = prelevements.stream()
+
+        Page<Prelevement> prelevementPages =
+                prelevementrepository.findByPersonne(personne, PageRequest.of(page, size));
+
+        List<PrelevementDTO> prelevementDTOS = prelevementPages.stream()
                 .map(prelevement -> prelevementMapper.fromPrelevement(prelevement))
                 .collect(Collectors.toList());
-        return prelevementDTOS;
+
+        PrelevementResponseDTO prelevementResponseDTO = new PrelevementResponseDTO();
+        prelevementResponseDTO.setPrelevementDTOS(prelevementDTOS);
+        prelevementResponseDTO.setCurrentPage(page);
+        prelevementResponseDTO.setPageSize(prelevementPages.getSize());
+        prelevementResponseDTO.setTotalPages(prelevementPages.getTotalPages());
+
+        return prelevementResponseDTO;
     }
 }

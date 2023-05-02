@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("detailNonConformite")
+@CrossOrigin("*")
 public class DetailNonConformiteController {
     private final DetailNonConformiteService detailNonConformiteService;
     private final ResultatPrelevementService resultatPrelevementService;

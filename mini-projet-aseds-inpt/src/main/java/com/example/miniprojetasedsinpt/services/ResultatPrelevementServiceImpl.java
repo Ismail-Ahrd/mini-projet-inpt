@@ -1,15 +1,21 @@
 package com.example.miniprojetasedsinpt.services;
 
 import com.example.miniprojetasedsinpt.dtos.ResultatPrelevementDTO;
+import com.example.miniprojetasedsinpt.dtos.ResultatPrelevementResponseDTO;
+import com.example.miniprojetasedsinpt.entities.Personne;
 import com.example.miniprojetasedsinpt.entities.Prelevement;
 import com.example.miniprojetasedsinpt.entities.ResultatPrelevement;
 import com.example.miniprojetasedsinpt.exceptions.PersonneNotFoundException;
 import com.example.miniprojetasedsinpt.exceptions.PrelevementNotFoundException;
 import com.example.miniprojetasedsinpt.exceptions.ProduitNotFoundException;
 import com.example.miniprojetasedsinpt.exceptions.ResultatNotFoundException;
+import com.example.miniprojetasedsinpt.mappers.PersonneMapper;
 import com.example.miniprojetasedsinpt.mappers.ResultatPrelevementMapper;
 import com.example.miniprojetasedsinpt.repositories.ResultatPrelevementRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -21,6 +27,8 @@ import java.util.stream.Collectors;
 public class ResultatPrelevementServiceImpl implements ResultatPrelevementService {
     private final ResultatPrelevementRepository resultatPrelevementRepository;
     private final ResultatPrelevementMapper resultatPrelevementMapper;
+    private final PersonneService personneService;
+    private final PersonneMapper personneMapper;
 
     @Override
     public ResultatPrelevementDTO saveResultatPrelevement(ResultatPrelevementDTO resultatPrelevementDTO)
@@ -51,11 +59,36 @@ public class ResultatPrelevementServiceImpl implements ResultatPrelevementServic
     }
 
     @Override
-    public List<ResultatPrelevementDTO> getAllResultatPrelevement() {
-        List<ResultatPrelevement> resultats = resultatPrelevementRepository.findAll();
-        List<ResultatPrelevementDTO> resultatPrelevementDTOS = resultats.stream()
+    public ResultatPrelevementResponseDTO getAllResultatPrelevement(int page, int size) {
+        Page<ResultatPrelevement> resultatPages =
+                resultatPrelevementRepository.findAll(PageRequest.of(page, size));
+        List<ResultatPrelevementDTO> resultatPrelevementDTOS = resultatPages.stream()
                 .map(resultat -> resultatPrelevementMapper.fromResultatPrelevement(resultat))
                 .collect(Collectors.toList());
-        return resultatPrelevementDTOS;
+        ResultatPrelevementResponseDTO resultatPrelevementResponseDTO = new ResultatPrelevementResponseDTO();
+        resultatPrelevementResponseDTO.setResultatPrelevementDTOS(resultatPrelevementDTOS);
+        resultatPrelevementResponseDTO.setCurrentPage(page);
+        resultatPrelevementResponseDTO.setTotalPages(resultatPages.getTotalPages());
+        resultatPrelevementResponseDTO.setPageSize(size);
+
+        return resultatPrelevementResponseDTO;
+    }
+
+    @Override
+    public ResultatPrelevementResponseDTO getAllResultatPrelevementByPersonne(
+            Long idPersonne, int page, int size) throws PersonneNotFoundException {
+        Personne personne = personneMapper.fromPersonneDTO(personneService.getPersonne(idPersonne));
+        Page<ResultatPrelevement> resultatPages =
+                resultatPrelevementRepository.findByPersonne(personne, PageRequest.of(page, size));
+        List<ResultatPrelevementDTO> resultatPrelevementDTOS = resultatPages.stream()
+                .map(resultat -> resultatPrelevementMapper.fromResultatPrelevement(resultat))
+                .collect(Collectors.toList());
+        ResultatPrelevementResponseDTO resultatPrelevementResponseDTO = new ResultatPrelevementResponseDTO();
+        resultatPrelevementResponseDTO.setResultatPrelevementDTOS(resultatPrelevementDTOS);
+        resultatPrelevementResponseDTO.setCurrentPage(page);
+        resultatPrelevementResponseDTO.setTotalPages(resultatPages.getTotalPages());
+        resultatPrelevementResponseDTO.setPageSize(size);
+
+        return resultatPrelevementResponseDTO;
     }
 }

@@ -17,6 +17,7 @@ public class PrelevementDTO {
     private Date dateEnvoie;
     private EtatAvancement etatAvancement;
     private Long idPersonne;
-    private Long idProduit;
+    //private Long idProduit;
+    private ProduitDTO produitDTO;
 
 }
