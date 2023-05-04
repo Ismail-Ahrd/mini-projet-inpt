@@ -7,6 +7,7 @@ import com.example.miniprojetasedsinpt.dtos.ProduitDTO;
 import com.example.miniprojetasedsinpt.entities.Personne;
 import com.example.miniprojetasedsinpt.entities.Prelevement;
 import com.example.miniprojetasedsinpt.entities.Produit;
+import com.example.miniprojetasedsinpt.entities.utils.EtatAvancement;
 import com.example.miniprojetasedsinpt.exceptions.PersonneNotFoundException;
 import com.example.miniprojetasedsinpt.exceptions.PrelevementNotFoundException;
 import com.example.miniprojetasedsinpt.exceptions.ProduitNotFoundException;
@@ -62,13 +63,35 @@ public class PrelevementServiceImpl implements PrelevementService {
     }
 
 
-    @Override
+    /*@Override
     public PrelevementResponseDTO getAllPrelevement(String kw, int page, int size) {
         Page<Prelevement> prelevementPages = prelevementrepository.findByProduitNomContains(kw, PageRequest.of(page, size));
         List<Prelevement> prelevements = prelevementPages.stream().toList();
 
         List<PrelevementDTO> prelevementDTOS = prelevements.stream()
                 .map(prelevement -> prelevementMapper.fromPrelevement(prelevement))
+                .collect(Collectors.toList());
+
+        PrelevementResponseDTO prelevementResponseDTO = new PrelevementResponseDTO();
+        prelevementResponseDTO.setPrelevementDTOS(prelevementDTOS);
+        prelevementResponseDTO.setCurrentPage(page);
+        prelevementResponseDTO.setTotalPages(prelevementPages.getTotalPages());
+        prelevementResponseDTO.setPageSize(prelevementPages.getSize());
+
+        return prelevementResponseDTO;
+    }*/
+
+    @Override
+    public PrelevementResponseDTO getAllPrelevement(String kw, EtatAvancement etat, int page, int size) {
+        Page<Prelevement> prelevementPages = null;
+        if (etat == null || etat.equals("")) {
+            prelevementPages = prelevementrepository.findByProduitNomContains(kw, PageRequest.of(page, size));
+        } else {
+            prelevementPages = prelevementrepository.findByProduitNomContainsAndEtatAvancement(kw, etat, PageRequest.of(page, size));
+        }
+
+        List<PrelevementDTO> prelevementDTOS = prelevementPages.stream()
+                .map(prel -> prelevementMapper.fromPrelevement(prel))
                 .collect(Collectors.toList());
 
         PrelevementResponseDTO prelevementResponseDTO = new PrelevementResponseDTO();

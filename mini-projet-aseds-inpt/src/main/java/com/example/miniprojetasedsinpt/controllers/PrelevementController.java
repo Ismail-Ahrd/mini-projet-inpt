@@ -2,6 +2,7 @@ package com.example.miniprojetasedsinpt.controllers;
 
 import com.example.miniprojetasedsinpt.dtos.PrelevementDTO;
 import com.example.miniprojetasedsinpt.dtos.PrelevementResponseDTO;
+import com.example.miniprojetasedsinpt.entities.utils.EtatAvancement;
 import com.example.miniprojetasedsinpt.exceptions.PersonneNotFoundException;
 import com.example.miniprojetasedsinpt.exceptions.PrelevementNotFoundException;
 import com.example.miniprojetasedsinpt.exceptions.ProduitNotFoundException;
@@ -17,13 +18,23 @@ import org.springframework.web.bind.annotation.*;
 public class PrelevementController {
     private final PrelevementService prelevementSrevice;
 
-    @GetMapping()
+    /*@GetMapping()
     public PrelevementResponseDTO getAllPrelevement(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "5") int size,
             @RequestParam(name = "keyword", defaultValue = "") String keyword
     ) {
         return prelevementSrevice.getAllPrelevement(keyword, page, size);
+    }*/
+
+    @GetMapping()
+    public PrelevementResponseDTO getAllPrelevement(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "keyword", defaultValue = "") String keyword,
+            @RequestParam(name = "etat", defaultValue = "") EtatAvancement etatAvancement
+            ) {
+        return prelevementSrevice.getAllPrelevement(keyword,etatAvancement, page, size);
     }
 
     @GetMapping("/{id}")
