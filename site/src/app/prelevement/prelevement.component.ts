@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-prelevement',
@@ -6,5 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./prelevement.component.css']
 })
 export class PrelevementComponent {
+  @ViewChild('f') Signupfrom: NgForm | undefined;
 
+
+  onSubmit(){
+  
+  console.log(this.Signupfrom)
+}
 }
