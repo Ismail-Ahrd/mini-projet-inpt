@@ -1,6 +1,7 @@
 package com.example.miniprojetasedsinpt.controllers;
 
 import com.example.miniprojetasedsinpt.dtos.ProduitDTO;
+import com.example.miniprojetasedsinpt.exceptions.NomOrCategorieIsNullException;
 import com.example.miniprojetasedsinpt.exceptions.ProduitNotFoundException;
 import com.example.miniprojetasedsinpt.services.ProduitService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class ProduitController {
     }
 
     @PostMapping
-    public ProduitDTO saveProduit(@RequestBody ProduitDTO produitDTO) {
+    public ProduitDTO saveProduit(@RequestBody ProduitDTO produitDTO) throws NomOrCategorieIsNullException {
         return produitService.saveProduit(produitDTO);
     }
 

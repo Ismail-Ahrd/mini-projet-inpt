@@ -2,6 +2,7 @@ package com.example.miniprojetasedsinpt.services;
 
 import com.example.miniprojetasedsinpt.dtos.ProduitDTO;
 import com.example.miniprojetasedsinpt.entities.Produit;
+import com.example.miniprojetasedsinpt.exceptions.NomOrCategorieIsNullException;
 import com.example.miniprojetasedsinpt.exceptions.ProduitNotFoundException;
 import com.example.miniprojetasedsinpt.mappers.ProduitMapper;
 import com.example.miniprojetasedsinpt.repositories.ProduitRepository;
@@ -18,7 +19,11 @@ public class ProduitServiceImpl implements ProduitService {
     private final ProduitMapper produitMapper;
 
     @Override
-    public ProduitDTO saveProduit(ProduitDTO produitDTO) {
+    public ProduitDTO saveProduit(ProduitDTO produitDTO) throws NomOrCategorieIsNullException {
+        if (produitDTO.getNom() == null || produitDTO.getCategorie() == null ||
+                produitDTO.getNom().equals("") || produitDTO.getCategorie().equals("")) {
+            throw new NomOrCategorieIsNullException("Le nom et le categorie sont requis");
+        }
         Produit produit = produitMapper.fromProduitDTO(produitDTO);
         Produit savedProduit = produitRepository.save(produit);
         return produitMapper.fromProduit(savedProduit);

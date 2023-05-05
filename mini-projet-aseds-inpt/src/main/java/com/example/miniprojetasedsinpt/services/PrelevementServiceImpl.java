@@ -8,6 +8,7 @@ import com.example.miniprojetasedsinpt.entities.Personne;
 import com.example.miniprojetasedsinpt.entities.Prelevement;
 import com.example.miniprojetasedsinpt.entities.Produit;
 import com.example.miniprojetasedsinpt.entities.utils.EtatAvancement;
+import com.example.miniprojetasedsinpt.exceptions.NomOrCategorieIsNullException;
 import com.example.miniprojetasedsinpt.exceptions.PersonneNotFoundException;
 import com.example.miniprojetasedsinpt.exceptions.PrelevementNotFoundException;
 import com.example.miniprojetasedsinpt.exceptions.ProduitNotFoundException;
@@ -39,7 +40,7 @@ public class PrelevementServiceImpl implements PrelevementService {
 
     @Override
     public PrelevementDTO savePrelevement(PrelevementDTO prelevementDTO)
-            throws PersonneNotFoundException, ProduitNotFoundException {
+            throws PersonneNotFoundException, ProduitNotFoundException, NomOrCategorieIsNullException {
         ProduitDTO savedProduitDTO = produitService.saveProduit(prelevementDTO.getProduitDTO());
         //log.info(String.valueOf(savedProduitDTO.getId()));
         Prelevement prelevement = prelevementMapper.fromPrelevementDTO(prelevementDTO);
@@ -61,25 +62,6 @@ public class PrelevementServiceImpl implements PrelevementService {
                 new PrelevementNotFoundException("Ce prelevement n'existe pas"));
         prelevementrepository.deleteById(id);
     }
-
-
-    /*@Override
-    public PrelevementResponseDTO getAllPrelevement(String kw, int page, int size) {
-        Page<Prelevement> prelevementPages = prelevementrepository.findByProduitNomContains(kw, PageRequest.of(page, size));
-        List<Prelevement> prelevements = prelevementPages.stream().toList();
-
-        List<PrelevementDTO> prelevementDTOS = prelevements.stream()
-                .map(prelevement -> prelevementMapper.fromPrelevement(prelevement))
-                .collect(Collectors.toList());
-
-        PrelevementResponseDTO prelevementResponseDTO = new PrelevementResponseDTO();
-        prelevementResponseDTO.setPrelevementDTOS(prelevementDTOS);
-        prelevementResponseDTO.setCurrentPage(page);
-        prelevementResponseDTO.setTotalPages(prelevementPages.getTotalPages());
-        prelevementResponseDTO.setPageSize(prelevementPages.getSize());
-
-        return prelevementResponseDTO;
-    }*/
 
     @Override
     public PrelevementResponseDTO getAllPrelevement(String kw, EtatAvancement etat, int page, int size) {
