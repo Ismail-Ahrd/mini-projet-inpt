@@ -19,24 +19,9 @@ public class MiniProjetAsedsInptApplication {
 		
 	}
 
-	@Bean
-	public CommandLineRunner commandLineRunner(
-			PersonneService personneService
-	) {
-		return args -> {
-			Stream.of("Hassan","Ahmed", "Najat")
-					.forEach(name -> {
-						Personne p = new Personne();
-						p.setPrenom(name);
-						p.setNom(name);
-						p.setEmail(name+"@gmail.com");
-						p.setMdp("123456");
-						p.setType(TypePersonne.AGENT_CONTROLE);
-						personneService.savePersonne(p);
-					});
-
-		}
-		;
+	
+		
+		
 	}
 
-}
+
