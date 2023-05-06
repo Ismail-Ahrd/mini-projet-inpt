@@ -41,6 +41,37 @@ a:hover{
     background-color: #3A46B5;
     height: 3px;
 }
+.log{
+    right: 0%;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+  
+    padding: 0.8%;
+    background-color: #3A46B5;
+    margin-top: 0.4%;
+    transition: 1s;
+}
+.succes{
+    transform:translateX(0);
+}
+.danger{
+    transform: translateX(+100%);
+    display: none;
+}
+.log button{
+    width: 200px;
+    border-radius: 5%;
+    background-color: green;
+    margin-left: 7%;
+    font-weight: bold;
+    color: white;
+}
+.log a{
+    text-decoration: none;
+}
+
 @media(max-width:700px){
     .navi{
         display: flex;
@@ -73,6 +104,7 @@ a:hover{
 }
 .svg2 svg{
 transform: translateY(-500%);
+
     
 }
 .line{
@@ -81,9 +113,42 @@ transform: translateY(-500%);
 .menuoppen{
     transform: translateX(-100%)
     
+
+
+
+}
+.log{
+   position: fixed;
+   left: 0.8%;
+   transition: 1s;
+
+
+    
+
+    background-color:#D5E9F1 ;
+
+}
+.log button{
+    width: 200px;
+    border-radius: 5%;
+    background-color: green;
+    margin-left: 7%;
+    font-weight: bold;
+    color: white;
+}
+.log a{
+    text-decoration: none;
+}
+.succes{
+    transform: translateX(0%);
+}
+.danger{
+    transform: translateX(+300);
 }
 
 }
+
+
 
 
 

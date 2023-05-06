@@ -1,0 +1,79 @@
+.header{
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 35px;
+    margin-left: 2%;
+    margin-top: 3%;
+
+}
+.box{
+   
+    margin: auto;
+    max-width: 1200px;
+  
+
+    
+    
+    
+}
+form{
+    border-top: 10px solid #247FCA;
+    border-bottom:2px solid black ;
+    border-right: 2px solid black;
+    border-left: 2px solid black;
+
+    display: flex;
+    justify-content: center;
+   
+   
+}
+.Nom{
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5%;
+    padding: 10%;
+  
+    
+}
+.Nom22{
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+   gap:5%;
+   padding: 10%;
+    
+}
+.Nom button{
+    margin-top: 4.8%;
+    font-weight: bold;
+
+}
+.Nom22 button{
+    margin-top: 5%;
+    font-weight: bold;
+}
+.Nom label{
+    font-weight: bold;
+    font-size: 16px;
+}
+.Nom22 label{
+    font-weight: bold;
+    font-size: 16px;
+}
+@media(max-width:600px){
+  .Nom{
+    padding: 0%;
+  }
+  .Nom22{
+    padding: 0%;
+  }
+    
+}
+.formvalid{
+    opacity: 0.3;
+}
+input.ng-invalid.ng-touched{
+    border: 1px solid red;
+}

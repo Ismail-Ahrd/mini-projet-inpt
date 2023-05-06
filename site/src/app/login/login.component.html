@@ -1,0 +1,17 @@
+
+
+<div class="forma">  
+    <div class="header">Connection:</div>       
+<form (ngSubmit)="onSubmit(authform)" #authform="ngForm">
+    <label >Email:</label>
+    <input type="text" ngModel name="email" required >
+    <label >Mot de passe:</label>
+    <input type="password" ngModel name="password" required>
+    <button  class="btn btn-success" type="submit" [disabled]="!authform.valid">Login</button>
+    <a href="creation">pas encore inscrit?inscrivez-vous ici</a>
+
+</form>
+
+
+
+</div>

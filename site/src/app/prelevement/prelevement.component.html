@@ -12,19 +12,36 @@
     <input type="date" ngModel name="date1" required></div>
    <div class="Nom"> <label for="Typeprel">Type du prélevement:</label>
     <select id="cars" >
-        <option let type of types>SMSKMSKM</option>
+        <option let type of types>P</option>
+        <option let type of types>RS</option>
+        
       </select></div>
      <div class="Nom"> <label for="Niveauprel">Niveau du prélvement:</label>
       <select>
-          <option let niv of niveaux></option>
+          <option let niv of niveaux>GMS</option>
+          <option let type of types>G</option>
+          <option let type of types>D</option>
+          <option let type of types>P</option>
+          <option let type of types>A</option>
+          <option let type of types>ES</option>
+
+
+
         </select></div>
        <div class="Nom"> <label for="Cadrecon">Cadre du controle:</label>
         <select  >
-            <option let cadre of cadres></option>
+            <option let cadre of cadres>PC1</option>
+            <option let type of types>PC2</option>
+            <option let type of types>PC3</option>
+            <option let type of types>FLA</option>
+            <option let type of types>PCTM</option>
+            <option let type of types>PMIC</option>
+            <option let type of types>PPF</option>
           </select></div>
        <div class="Nom">   <label for="Cadrecon">Labo de destination:</label>
         <select  >
-            <option let labo of labos></option>
+            <option let labo of labos>LOARC</option>
+            <option let type of types>LRAR</option>
           </select></div>
            <div class="Nom"> <label for="date">Date d'envoi d'echantillon</label>
             <input type="date" ngModel name="Date2" required ></div>
