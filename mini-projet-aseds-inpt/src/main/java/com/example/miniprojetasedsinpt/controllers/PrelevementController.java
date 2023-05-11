@@ -9,6 +9,7 @@ import com.example.miniprojetasedsinpt.exceptions.PrelevementNotFoundException;
 import com.example.miniprojetasedsinpt.exceptions.ProduitNotFoundException;
 import com.example.miniprojetasedsinpt.services.PrelevementService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/prelevement")
+@Slf4j
 @CrossOrigin("*")
 public class PrelevementController {
     private final PrelevementService prelevementSrevice;
@@ -31,23 +33,8 @@ public class PrelevementController {
             ) {
         PrelevementResponseDTO allPrelevement =
                 prelevementSrevice.getAllPrelevement(keyword, etatAvancement, page, size);
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Access-Control-Allow-Origin", "http://localhost:4200");
-        return new ResponseEntity<>(allPrelevement, headers, HttpStatus.OK);
+        return new ResponseEntity<>(allPrelevement, HttpStatus.OK);
     }
-
-    /*try {
-        List<Prelevement> prelevements = new ArrayList<Prelevement>();
-
-        // TODO: Populate the list of prelevements based on the provided parameters
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Access-Control-Allow-Origin", "http://localhost:4200");
-
-        return new ResponseEntity<>(prelevements, headers, HttpStatus.OK);
-    } catch (Exception e) {
-        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-    }*/
 
     @GetMapping("/{id}")
     public PrelevementDTO getPrelevement(@PathVariable Long id)
