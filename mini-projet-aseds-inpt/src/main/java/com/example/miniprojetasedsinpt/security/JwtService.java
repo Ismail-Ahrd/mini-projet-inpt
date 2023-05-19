@@ -59,6 +59,11 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
+    public Long extractIdPersonne(String token) {
+        Claims claims = extractAllClaims(token);
+        Long idPersonne = claims.get("idPersonne", Long.class);
+        return idPersonne;
+    }
 
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);

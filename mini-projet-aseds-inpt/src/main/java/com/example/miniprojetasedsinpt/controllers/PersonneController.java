@@ -6,6 +6,7 @@ import com.example.miniprojetasedsinpt.exceptions.PersonneNotFoundException;
 import com.example.miniprojetasedsinpt.repositories.PersonneRepository;
 import com.example.miniprojetasedsinpt.security.AuthenticationRequest;
 import com.example.miniprojetasedsinpt.services.PersonneService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import java.util.Optional;
 @RequestMapping("/personne")
 @CrossOrigin("*")
 @Slf4j
+@SecurityRequirement(name = "api")
 public class PersonneController {
     private final PersonneService personneService;
     private final PersonneRepository personneRepository;

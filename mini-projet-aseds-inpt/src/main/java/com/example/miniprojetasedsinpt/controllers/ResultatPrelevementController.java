@@ -9,6 +9,7 @@ import com.example.miniprojetasedsinpt.exceptions.ResultatNotFoundException;
 import com.example.miniprojetasedsinpt.services.PersonneService;
 import com.example.miniprojetasedsinpt.services.PrelevementService;
 import com.example.miniprojetasedsinpt.services.ResultatPrelevementService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/resultatPrelevement")
 @CrossOrigin("*")
+@SecurityRequirement(name = "api")
 public class ResultatPrelevementController {
     private final ResultatPrelevementService resultatPrelevementService;
     private final PersonneService personneService;

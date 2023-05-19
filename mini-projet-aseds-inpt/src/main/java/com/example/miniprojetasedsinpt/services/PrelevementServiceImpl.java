@@ -37,12 +37,27 @@ public class PrelevementServiceImpl implements PrelevementService {
     private final PersonneMapper personneMapper;
     private final ProduitMapper produitMapper;
     private final ProduitService produitService;
+    private final ProduitRepository produitRepository;
 
     @Override
     public PrelevementDTO savePrelevement(PrelevementDTO prelevementDTO)
             throws PersonneNotFoundException, ProduitNotFoundException, NomOrCategorieIsNullException {
-        ProduitDTO savedProduitDTO = produitService.saveProduit(prelevementDTO.getProduitDTO());
-        //log.info(String.valueOf(savedProduitDTO.getId()));
+
+        String produitNom = prelevementDTO.getProduitDTO().getNom();
+        String produitCategorie = prelevementDTO.getProduitDTO().getCategorie();
+
+        Produit savedProduit = produitRepository.findByNomAndAndCategorie(produitNom, produitCategorie);
+        ProduitDTO savedProduitDTO = null;
+
+        if (savedProduit == null) {
+            savedProduitDTO = produitService.saveProduit(prelevementDTO.getProduitDTO());
+        } else {
+            savedProduitDTO = produitMapper.fromProduit(savedProduit);
+        }
+
+        /*log.info("Produit");
+        log.info(String.valueOf(savedProduitDTO.getId()));*/
+
         Prelevement prelevement = prelevementMapper.fromPrelevementDTO(prelevementDTO);
         prelevement.setProduit(produitMapper.fromProduitDTO(savedProduitDTO));
         Prelevement savedPrelevement = prelevementrepository.save(prelevement);
@@ -86,14 +101,24 @@ public class PrelevementServiceImpl implements PrelevementService {
     }
 
     @Override
-    public PrelevementResponseDTO getAllPrelevementByPersonne(Long idPersonne, int page, int size)
+    public PrelevementResponseDTO getAllPrelevementByPersonne
+            (Long idPersonne,String kw, EtatAvancement etat, int page, int size)
             throws PersonneNotFoundException {
 
         PersonneDTO personneDTO = personneService.getPersonne(idPersonne);
         Personne personne = personneMapper.fromPersonneDTO(personneDTO);
 
-        Page<Prelevement> prelevementPages =
-                prelevementrepository.findByPersonne(personne, PageRequest.of(page, size));
+        /*Page<Prelevement> prelevementPages =
+                prelevementrepository.findByPersonne(personne, PageRequest.of(page, size));*/
+        Page<Prelevement> prelevementPages = null;
+        if (etat == null || etat.equals("")) {
+            prelevementPages = prelevementrepository.findByPersonneAndProduitNomContains
+                    (personne, kw, PageRequest.of(page, size));
+        } else {
+            prelevementPages= prelevementrepository.findByPersonneAndProduitNomContainsAndEtatAvancement(
+                    personne, kw, etat, PageRequest.of(page, size));
+        }
+
 
         List<PrelevementDTO> prelevementDTOS = prelevementPages.stream()
                 .map(prelevement -> prelevementMapper.fromPrelevement(prelevement))

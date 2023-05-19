@@ -4,6 +4,7 @@ import com.example.miniprojetasedsinpt.dtos.ProduitDTO;
 import com.example.miniprojetasedsinpt.exceptions.NomOrCategorieIsNullException;
 import com.example.miniprojetasedsinpt.exceptions.ProduitNotFoundException;
 import com.example.miniprojetasedsinpt.services.ProduitService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/produit")
 @CrossOrigin("*")
+@SecurityRequirement(name = "api")
 public class ProduitController {
     private final ProduitService produitService;
 

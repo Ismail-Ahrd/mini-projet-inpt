@@ -14,4 +14,7 @@ public interface PrelevementRepository extends JpaRepository<Prelevement, Long> 
     Page<Prelevement> findByProduitNomContains(String keyword, Pageable pageable);
     Page<Prelevement> findByEtatAvancement(EtatAvancement etatAvancement, Pageable pageable);
     Page<Prelevement> findByProduitNomContainsAndEtatAvancement(String keyword, EtatAvancement etatAvancement, Pageable pageable);
+    Page<Prelevement> findByPersonneAndProduitNomContainsAndEtatAvancement(
+            Personne personne, String kw, EtatAvancement etatAvancement, Pageable pageable);
+    Page<Prelevement> findByPersonneAndProduitNomContains(Personne personne, String kw, Pageable pageable);
 }
