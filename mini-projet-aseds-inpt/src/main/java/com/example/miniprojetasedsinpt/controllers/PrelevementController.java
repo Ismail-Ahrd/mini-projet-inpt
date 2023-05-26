@@ -57,8 +57,6 @@ public class PrelevementController {
         String authHeader = request.getHeader("Authorization");
         String jwt = authHeader.substring(7);
         Long idPersonne = jwtService.extractIdPersonne(jwt);
-        /*log.info("ID Personne");
-        log.info(String.valueOf(idPersonne));*/
         return prelevementSrevice.savePrelevement(prelevementDTO);
     }
 

@@ -82,9 +82,9 @@ public class PrelevementServiceImpl implements PrelevementService {
     public PrelevementResponseDTO getAllPrelevement(String kw, EtatAvancement etat, int page, int size) {
         Page<Prelevement> prelevementPages = null;
         if (etat == null || etat.equals("")) {
-            prelevementPages = prelevementrepository.findByProduitNomContains(kw, PageRequest.of(page, size));
+            prelevementPages = prelevementrepository.findByProduitNomContainsOrderByDateEnvoieDesc(kw, PageRequest.of(page, size));
         } else {
-            prelevementPages = prelevementrepository.findByProduitNomContainsAndEtatAvancement(kw, etat, PageRequest.of(page, size));
+            prelevementPages = prelevementrepository.findByProduitNomContainsAndEtatAvancementOrderByDateEnvoieDesc(kw, etat, PageRequest.of(page, size));
         }
 
         List<PrelevementDTO> prelevementDTOS = prelevementPages.stream()
@@ -112,10 +112,10 @@ public class PrelevementServiceImpl implements PrelevementService {
                 prelevementrepository.findByPersonne(personne, PageRequest.of(page, size));*/
         Page<Prelevement> prelevementPages = null;
         if (etat == null || etat.equals("")) {
-            prelevementPages = prelevementrepository.findByPersonneAndProduitNomContains
-                    (personne, kw, PageRequest.of(page, size));
+            prelevementPages = prelevementrepository.findByPersonneAndProduitNomContainsOrderByDateEnvoieDesc(
+                    personne, kw, PageRequest.of(page, size));
         } else {
-            prelevementPages= prelevementrepository.findByPersonneAndProduitNomContainsAndEtatAvancement(
+            prelevementPages= prelevementrepository.findByPersonneAndProduitNomContainsAndEtatAvancementOrderByDateEnvoieDesc(
                     personne, kw, etat, PageRequest.of(page, size));
         }
 
