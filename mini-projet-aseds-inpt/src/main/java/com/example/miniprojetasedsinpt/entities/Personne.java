@@ -1,5 +1,6 @@
 package com.example.miniprojetasedsinpt.entities;
 
+import com.example.miniprojetasedsinpt.entities.utils.Labo;
 import com.example.miniprojetasedsinpt.entities.utils.TypePersonne;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,6 +21,7 @@ public class Personne {
     private String email;
     private String mdp;
     private TypePersonne type;
+    private Labo labo;
     @OneToMany(mappedBy = "personne")
     private List<Prelevement> prelevements;
     @OneToMany(mappedBy = "personne", fetch = FetchType.EAGER)

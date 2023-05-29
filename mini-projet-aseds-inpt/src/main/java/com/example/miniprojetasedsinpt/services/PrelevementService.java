@@ -4,6 +4,7 @@ import com.example.miniprojetasedsinpt.dtos.PrelevementDTO;
 import com.example.miniprojetasedsinpt.dtos.PrelevementResponseDTO;
 import com.example.miniprojetasedsinpt.entities.Prelevement;
 import com.example.miniprojetasedsinpt.entities.utils.EtatAvancement;
+import com.example.miniprojetasedsinpt.entities.utils.Labo;
 import com.example.miniprojetasedsinpt.exceptions.NomOrCategorieIsNullException;
 import com.example.miniprojetasedsinpt.exceptions.PersonneNotFoundException;
 import com.example.miniprojetasedsinpt.exceptions.PrelevementNotFoundException;
@@ -18,4 +19,6 @@ public interface PrelevementService {
     PrelevementResponseDTO getAllPrelevement(String kw, EtatAvancement etat, int page, int size);
     PrelevementResponseDTO getAllPrelevementByPersonne
             (Long idPersonne,String kw, EtatAvancement etat, int page, int size) throws PersonneNotFoundException;
+    PrelevementResponseDTO getAllPrelevementByLabo
+            (Labo labo, String kw, EtatAvancement etat, int page, int size);
 }

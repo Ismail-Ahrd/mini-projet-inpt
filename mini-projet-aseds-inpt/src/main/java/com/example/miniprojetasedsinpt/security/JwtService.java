@@ -1,5 +1,6 @@
 package com.example.miniprojetasedsinpt.security;
 
+import com.example.miniprojetasedsinpt.entities.utils.Labo;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
@@ -63,6 +64,12 @@ public class JwtService {
         Claims claims = extractAllClaims(token);
         Long idPersonne = claims.get("idPersonne", Long.class);
         return idPersonne;
+    }
+
+    public String extractLabo(String token) {
+        Claims claims = extractAllClaims(token);
+        String labo = claims.get("labo",String.class);
+        return labo;
     }
 
     private Date extractExpiration(String token) {

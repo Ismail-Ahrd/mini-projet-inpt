@@ -1,5 +1,6 @@
 package com.example.miniprojetasedsinpt.dtos;
 
+import com.example.miniprojetasedsinpt.entities.utils.Labo;
 import com.example.miniprojetasedsinpt.entities.utils.TypePersonne;
 import lombok.Data;
 
@@ -11,4 +12,5 @@ public class PersonneDTO {
     private String email;
     private String mdp;
     private TypePersonne type;
+    private Labo labo;
 }

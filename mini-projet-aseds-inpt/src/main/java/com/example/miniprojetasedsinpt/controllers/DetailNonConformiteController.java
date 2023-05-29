@@ -28,6 +28,14 @@ public class DetailNonConformiteController {
         return 	detailNonConformiteService.getDetail(id);
     }
 
+    @GetMapping("/resultat/{idResultat}")
+    public DetailNonConformiteDTO getDetailByResultat(@PathVariable Long idResultat)
+            throws ResultatNotFoundException, PersonneNotFoundException,
+            ProduitNotFoundException, PrelevementNotFoundException
+    {
+        return detailNonConformiteService.getDetailByIdResultat(idResultat);
+    }
+
     @PostMapping
     public DetailNonConformiteDTO saveDetail(@RequestBody DetailNonConformiteDTO detailNonConformiteDTO)
             throws ResultatNotFoundException, PersonneNotFoundException,

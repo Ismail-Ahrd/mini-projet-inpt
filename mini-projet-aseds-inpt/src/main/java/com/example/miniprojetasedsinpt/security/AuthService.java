@@ -2,6 +2,7 @@ package com.example.miniprojetasedsinpt.security;
 
 import com.example.miniprojetasedsinpt.dtos.PersonneDTO;
 import com.example.miniprojetasedsinpt.entities.Personne;
+import com.example.miniprojetasedsinpt.entities.utils.TypePersonne;
 import com.example.miniprojetasedsinpt.mappers.PersonneMapper;
 import com.example.miniprojetasedsinpt.repositories.PersonneRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,10 @@ public class AuthService {
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("idPersonne", savedPersonne.getId());
         extraClaims.put("type", savedPersonne.getType());
+        extraClaims.put("nom", savedPersonne.getPrenom());
+        if(personneDTO.getType().equals(TypePersonne.RESPO_LABO)){
+            extraClaims.put("labo", savedPersonne.getLabo());
+        }
         String jwtToken = jwtService.generateToken(extraClaims,userDetails);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
@@ -48,6 +53,10 @@ public class AuthService {
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("idPersonne", personne.getId());
         extraClaims.put("type", personne.getType());
+        extraClaims.put("nom", personne.getPrenom());
+        if(personne.getType().equals(TypePersonne.RESPO_LABO)){
+            extraClaims.put("labo", personne.getLabo());
+        }
         UserDetails userDetails = new UserRegistrationDetails(personne);
         String jwtToken = jwtService.generateToken(extraClaims, userDetails);
         return AuthenticationResponse.builder()

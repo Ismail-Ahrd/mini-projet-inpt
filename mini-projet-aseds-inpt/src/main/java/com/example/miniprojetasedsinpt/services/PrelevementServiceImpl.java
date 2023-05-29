@@ -8,6 +8,7 @@ import com.example.miniprojetasedsinpt.entities.Personne;
 import com.example.miniprojetasedsinpt.entities.Prelevement;
 import com.example.miniprojetasedsinpt.entities.Produit;
 import com.example.miniprojetasedsinpt.entities.utils.EtatAvancement;
+import com.example.miniprojetasedsinpt.entities.utils.Labo;
 import com.example.miniprojetasedsinpt.exceptions.NomOrCategorieIsNullException;
 import com.example.miniprojetasedsinpt.exceptions.PersonneNotFoundException;
 import com.example.miniprojetasedsinpt.exceptions.PrelevementNotFoundException;
@@ -130,6 +131,29 @@ public class PrelevementServiceImpl implements PrelevementService {
         prelevementResponseDTO.setPageSize(prelevementPages.getSize());
         prelevementResponseDTO.setTotalPages(prelevementPages.getTotalPages());
 
+        return prelevementResponseDTO;
+    }
+
+    @Override
+    public PrelevementResponseDTO getAllPrelevementByLabo(Labo labo, String kw, EtatAvancement etat, int page, int size) {
+        Page<Prelevement> prelevementPages = null;
+        if (etat == null || etat.equals("")) {
+            prelevementPages = prelevementrepository.findByLaboDestinationAndProduitNomContainsOrderByDateEnvoieDesc(
+                    labo, kw, PageRequest.of(page, size));
+        } else {
+            prelevementPages= prelevementrepository.findByLaboDestinationAndProduitNomContainsAndEtatAvancementOrderByDateEnvoieDesc(
+                    labo, kw, etat, PageRequest.of(page, size));
+        }
+
+        List<PrelevementDTO> prelevementDTOS = prelevementPages.stream()
+                .map(prelevement -> prelevementMapper.fromPrelevement(prelevement))
+                .collect(Collectors.toList());
+
+        PrelevementResponseDTO prelevementResponseDTO = new PrelevementResponseDTO();
+        prelevementResponseDTO.setPrelevementDTOS(prelevementDTOS);
+        prelevementResponseDTO.setCurrentPage(page);
+        prelevementResponseDTO.setPageSize(prelevementPages.getSize());
+        prelevementResponseDTO.setTotalPages(prelevementPages.getTotalPages());
         return prelevementResponseDTO;
     }
 }

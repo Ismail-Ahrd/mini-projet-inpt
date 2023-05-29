@@ -1,9 +1,12 @@
 package com.example.miniprojetasedsinpt.services;
 
 import com.example.miniprojetasedsinpt.dtos.DetailNonConformiteDTO;
+import com.example.miniprojetasedsinpt.dtos.ResultatPrelevementDTO;
 import com.example.miniprojetasedsinpt.entities.DetailNonConformite;
+import com.example.miniprojetasedsinpt.entities.ResultatPrelevement;
 import com.example.miniprojetasedsinpt.exceptions.*;
 import com.example.miniprojetasedsinpt.mappers.DetailMapper;
+import com.example.miniprojetasedsinpt.mappers.ResultatPrelevementMapper;
 import com.example.miniprojetasedsinpt.repositories.DetailNonConformiteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,8 @@ import java.util.stream.Collectors;
 public class DetailNonConformiteServiceImpl implements DetailNonConformiteService {
     private final DetailNonConformiteRepository detailNonConformiteRepository;
     private final DetailMapper detailMapper;
+    private final ResultatPrelevementService resultatService;
+    private final ResultatPrelevementMapper resultatMapper;
 
     @Override
     public DetailNonConformiteDTO saveDetail(DetailNonConformiteDTO detailDTO) throws ResultatNotFoundException, PersonneNotFoundException, ProduitNotFoundException, PrelevementNotFoundException {
@@ -39,5 +44,17 @@ public class DetailNonConformiteServiceImpl implements DetailNonConformiteServic
                 .map(detail -> detailMapper.fromDetailNonConformite(detail))
                 .collect(Collectors.toList());
         return detailNonConformiteDTOS;
+    }
+
+    @Override
+    public DetailNonConformiteDTO getDetailByIdResultat(Long idResultat)
+            throws ResultatNotFoundException, PersonneNotFoundException,
+            ProduitNotFoundException, PrelevementNotFoundException
+    {
+        ResultatPrelevementDTO resultatPrelevementDTO = this.resultatService.getResultatPrelevement(idResultat);
+        ResultatPrelevement resultatPrelevement = resultatMapper.fromResultatPrelevementDTO(resultatPrelevementDTO);
+
+        DetailNonConformite detail = detailNonConformiteRepository.findByResultatPrel(resultatPrelevement);
+        return detailMapper.fromDetailNonConformite(detail);
     }
 }

@@ -25,7 +25,7 @@ public class UserRegistrationDetails implements UserDetails{
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());*/
         List<GrantedAuthority> authorityList = new ArrayList<>();
-        authorityList.add(new SimpleGrantedAuthority("USER"));
+        authorityList.add(new SimpleGrantedAuthority(personne.getType().toString()));
         this.authorities = authorityList;
     }
 

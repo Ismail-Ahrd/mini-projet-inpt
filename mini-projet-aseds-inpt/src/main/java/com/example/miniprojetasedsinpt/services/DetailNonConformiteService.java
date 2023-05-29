@@ -10,4 +10,5 @@ public interface DetailNonConformiteService {
     DetailNonConformiteDTO saveDetail(DetailNonConformiteDTO detail) throws ResultatNotFoundException, PersonneNotFoundException, ProduitNotFoundException, PrelevementNotFoundException;
     DetailNonConformiteDTO getDetail(Long id) throws DetailNotFoundException;
     List<DetailNonConformiteDTO> getAllDetails();
+    DetailNonConformiteDTO getDetailByIdResultat(Long idResultat) throws ResultatNotFoundException, PersonneNotFoundException, ProduitNotFoundException, PrelevementNotFoundException;
 }

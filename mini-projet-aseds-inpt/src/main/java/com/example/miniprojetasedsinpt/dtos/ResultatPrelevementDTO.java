@@ -12,5 +12,5 @@ public class ResultatPrelevementDTO {
     private boolean conforme;
     private Long idPersonne;
     private Long idPrelevement;
-
+    private String nomProduit;
 }

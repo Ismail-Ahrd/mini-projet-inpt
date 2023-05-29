@@ -9,6 +9,8 @@ import com.example.miniprojetasedsinpt.services.PersonneService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +25,11 @@ import java.util.Optional;
 public class PersonneController {
     private final PersonneService personneService;
     private final PersonneRepository personneRepository;
+
+    @GetMapping("/auth")
+    Authentication authentication() {
+        return SecurityContextHolder.getContext().getAuthentication();
+    }
 
     @GetMapping
     public List<PersonneDTO> getAllPersonnes() {

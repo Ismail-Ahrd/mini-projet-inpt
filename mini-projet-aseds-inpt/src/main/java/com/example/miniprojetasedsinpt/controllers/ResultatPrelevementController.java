@@ -2,15 +2,13 @@ package com.example.miniprojetasedsinpt.controllers;
 
 import com.example.miniprojetasedsinpt.dtos.ResultatPrelevementDTO;
 import com.example.miniprojetasedsinpt.dtos.ResultatPrelevementResponseDTO;
-import com.example.miniprojetasedsinpt.exceptions.PersonneNotFoundException;
-import com.example.miniprojetasedsinpt.exceptions.PrelevementNotFoundException;
-import com.example.miniprojetasedsinpt.exceptions.ProduitNotFoundException;
-import com.example.miniprojetasedsinpt.exceptions.ResultatNotFoundException;
+import com.example.miniprojetasedsinpt.exceptions.*;
 import com.example.miniprojetasedsinpt.services.PersonneService;
 import com.example.miniprojetasedsinpt.services.PrelevementService;
 import com.example.miniprojetasedsinpt.services.ResultatPrelevementService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,14 +48,15 @@ public class ResultatPrelevementController {
     }
 
     @PostMapping
+    //@PreAuthorize("hasAuthority('RESPO_LABO')")
     public ResultatPrelevementDTO saveResultatPrelevement(
             @RequestBody ResultatPrelevementDTO resultatPrelevementDTO
-    ) throws PersonneNotFoundException, ProduitNotFoundException, PrelevementNotFoundException
-    {
+    ) throws PersonneNotFoundException, ProduitNotFoundException, PrelevementNotFoundException, NomOrCategorieIsNullException {
         return resultatPrelevementService.saveResultatPrelevement(resultatPrelevementDTO);
     }
 
     @DeleteMapping("{id}")
+    //@PreAuthorize("hasAuthority('RESPO_LABO')")
     public void deleteResultatPrelevement(@PathVariable Long id) throws ResultatNotFoundException {
         resultatPrelevementService.deleteResultatPrelevement(id);
     }
