@@ -113,9 +113,11 @@ public class ResultatPrelevementServiceImpl implements ResultatPrelevementServic
     @Override
     public ResultatPrelevementResponseDTO getAllResultatPrelevementByPersonneAndPrelevement(
             Long idPersonne,int page, int size) throws PersonneNotFoundException {
+
         PersonneDTO personneDTO = personneService.getPersonne(idPersonne);
-        Page<Prelevement> prelevements = prelevementRepository
-                .findByPersonne(personneMapper.fromPersonneDTO(personneDTO), PageRequest.of(page, size));
+        List<Prelevement> prelevements = prelevementRepository
+                .findByPersonne(personneMapper.fromPersonneDTO(personneDTO));
+
         List<ResultatPrelevement> resultats = prelevements.stream()
                 .map(prelevement -> resultatPrelevementRepository.findByPrelevement(prelevement))
                 .collect(Collectors.toList());
@@ -128,10 +130,32 @@ public class ResultatPrelevementServiceImpl implements ResultatPrelevementServic
                 })
                 .filter(resultatPrelevementDTO -> resultatPrelevementDTO != null)
                 .collect(Collectors.toList());
+
+        int listSize = resultatPrelevementDTOS.size();
         ResultatPrelevementResponseDTO resultatPrelevementResponseDTO = new ResultatPrelevementResponseDTO();
-        resultatPrelevementResponseDTO.setResultatPrelevementDTOS(resultatPrelevementDTOS);
+        if (listSize<size && page == 0) {
+            resultatPrelevementResponseDTO.setResultatPrelevementDTOS(resultatPrelevementDTOS);
+        } else if (listSize<size && page != 0) {
+            resultatPrelevementResponseDTO.setResultatPrelevementDTOS(null);
+        } else if (page*size>=listSize) {
+            resultatPrelevementResponseDTO.setResultatPrelevementDTOS(null);
+        } else if ((page+1)*size>listSize-1) {
+            resultatPrelevementResponseDTO.setResultatPrelevementDTOS(resultatPrelevementDTOS.subList(page*size,listSize));
+        }else {
+            resultatPrelevementResponseDTO.setResultatPrelevementDTOS(resultatPrelevementDTOS.subList(page*size,(page+1)*size));
+        }
+
+        int totalPages;
+        if (listSize%size==0) {
+            totalPages=listSize/size;
+        } else if (size>listSize) {
+            totalPages=1;
+        } else {
+            totalPages=listSize/size + 1;
+        }
+
         resultatPrelevementResponseDTO.setCurrentPage(page);
-        resultatPrelevementResponseDTO.setTotalPages(resultatPrelevementDTOS.size());
+        resultatPrelevementResponseDTO.setTotalPages(totalPages);
         resultatPrelevementResponseDTO.setPageSize(size);
         return resultatPrelevementResponseDTO;
     }

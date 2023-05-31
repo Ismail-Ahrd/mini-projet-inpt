@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PrelevementRepository extends JpaRepository<Prelevement, Long> {
+    List<Prelevement>findByPersonne(Personne personne);
     Page<Prelevement> findByPersonne(Personne personne, Pageable pageable);
     Page<Prelevement> findByProduitNomContainsOrderByDateEnvoieDesc(String keyword, Pageable pageable);
     Page<Prelevement> findByEtatAvancementOrderByDateEnvoieDesc(EtatAvancement etatAvancement, Pageable pageable);
