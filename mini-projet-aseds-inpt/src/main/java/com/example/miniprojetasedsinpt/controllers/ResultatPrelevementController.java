@@ -32,12 +32,21 @@ public class ResultatPrelevementController {
     }
 
     @GetMapping("/personne/{idPersonne}")
-    public ResultatPrelevementResponseDTO getAllPrelevementByPersonne(
+    public ResultatPrelevementResponseDTO getAllResultatPrelevementByPersonne(
             @PathVariable Long idPersonne,
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "5") int size) throws PersonneNotFoundException
     {
         return resultatPrelevementService.getAllResultatPrelevementByPersonne(idPersonne, page, size);
+    }
+
+    @GetMapping("/personne/prelevement/{idPersonne}")
+    public ResultatPrelevementResponseDTO getAllResultatPrelevementByPersonneAndPrelevement(
+            @PathVariable Long idPersonne,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size) throws PersonneNotFoundException
+    {
+        return resultatPrelevementService.getAllResultatPrelevementByPersonneAndPrelevement(idPersonne, page, size);
     }
 
     @GetMapping("/{id}")

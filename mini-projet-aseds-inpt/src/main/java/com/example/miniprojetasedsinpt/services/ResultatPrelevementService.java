@@ -13,4 +13,6 @@ public interface ResultatPrelevementService {
     void deleteResultatPrelevement(long id) throws ResultatNotFoundException;
     ResultatPrelevementResponseDTO getAllResultatPrelevement(int page, int size);
     ResultatPrelevementResponseDTO getAllResultatPrelevementByPersonne(Long idPersonne, int page, int size) throws PersonneNotFoundException;
+    ResultatPrelevementResponseDTO getAllResultatPrelevementByPersonneAndPrelevement(
+            Long idPersonne, int page, int size) throws PersonneNotFoundException;
 }

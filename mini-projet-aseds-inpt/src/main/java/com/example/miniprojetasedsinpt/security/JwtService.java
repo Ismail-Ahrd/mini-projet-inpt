@@ -86,6 +86,11 @@ public class JwtService {
     }
 
 
+    public void setTokenExpirationToPast(String jwt) {
+        Claims claims = extractAllClaims(jwt);
+        Date expiration = new Date(System.currentTimeMillis() - 1000);
+        claims.setExpiration(expiration);
+    }
 }
 
 

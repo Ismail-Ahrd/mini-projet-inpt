@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +26,16 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(PersonneDTO personneDTO) {
+    public AuthenticationResponse register(PersonneDTO personneDTO){
+        String email = personneDTO.getEmail();
+        Optional<Personne> existingPersonne = personneRepository.findByEmail(email);
+        if(existingPersonne.isPresent() ) {
+            String errorMessage = "ce compte avec cet email existe déjà";
+            return AuthenticationResponse.builder()
+                    .token(null) // Set token to null since it's an error response
+                    .errorMessage(errorMessage)
+                    .build();
+        }
         Personne personne = personneMapper.fromPersonneDTO(personneDTO);
         Personne savedPersonne = personneRepository.save(personne);
         UserDetails userDetails = new UserRegistrationDetails(savedPersonne);
@@ -63,5 +73,6 @@ public class AuthService {
                 .token(jwtToken)
                 .build();
     }
+
 
 }

@@ -1,5 +1,6 @@
 package com.example.miniprojetasedsinpt.services;
 
+import com.example.miniprojetasedsinpt.dtos.PersonneDTO;
 import com.example.miniprojetasedsinpt.dtos.PrelevementDTO;
 import com.example.miniprojetasedsinpt.dtos.ResultatPrelevementDTO;
 import com.example.miniprojetasedsinpt.dtos.ResultatPrelevementResponseDTO;
@@ -10,14 +11,13 @@ import com.example.miniprojetasedsinpt.entities.utils.EtatAvancement;
 import com.example.miniprojetasedsinpt.exceptions.*;
 import com.example.miniprojetasedsinpt.mappers.PersonneMapper;
 import com.example.miniprojetasedsinpt.mappers.ResultatPrelevementMapper;
+import com.example.miniprojetasedsinpt.repositories.PrelevementRepository;
 import com.example.miniprojetasedsinpt.repositories.ResultatPrelevementRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,6 +31,7 @@ public class ResultatPrelevementServiceImpl implements ResultatPrelevementServic
     private final PersonneService personneService;
     private final PersonneMapper personneMapper;
     private final PrelevementService prelevementService;
+    private final PrelevementRepository prelevementRepository;
 
     @Override
     public ResultatPrelevementDTO saveResultatPrelevement(ResultatPrelevementDTO resultatPrelevementDTO)
@@ -108,4 +109,31 @@ public class ResultatPrelevementServiceImpl implements ResultatPrelevementServic
 
         return resultatPrelevementResponseDTO;
     }
+
+    @Override
+    public ResultatPrelevementResponseDTO getAllResultatPrelevementByPersonneAndPrelevement(
+            Long idPersonne,int page, int size) throws PersonneNotFoundException {
+        PersonneDTO personneDTO = personneService.getPersonne(idPersonne);
+        Page<Prelevement> prelevements = prelevementRepository
+                .findByPersonne(personneMapper.fromPersonneDTO(personneDTO), PageRequest.of(page, size));
+        List<ResultatPrelevement> resultats = prelevements.stream()
+                .map(prelevement -> resultatPrelevementRepository.findByPrelevement(prelevement))
+                .collect(Collectors.toList());
+        List<ResultatPrelevementDTO> resultatPrelevementDTOS = resultats.stream()
+                .map(resultatPrelevement -> {
+                    if (resultatPrelevement != null) {
+                        return resultatPrelevementMapper.fromResultatPrelevement(resultatPrelevement);
+                    }
+                    return null;
+                })
+                .filter(resultatPrelevementDTO -> resultatPrelevementDTO != null)
+                .collect(Collectors.toList());
+        ResultatPrelevementResponseDTO resultatPrelevementResponseDTO = new ResultatPrelevementResponseDTO();
+        resultatPrelevementResponseDTO.setResultatPrelevementDTOS(resultatPrelevementDTOS);
+        resultatPrelevementResponseDTO.setCurrentPage(page);
+        resultatPrelevementResponseDTO.setTotalPages(resultatPrelevementDTOS.size());
+        resultatPrelevementResponseDTO.setPageSize(size);
+        return resultatPrelevementResponseDTO;
+    }
+
 }
