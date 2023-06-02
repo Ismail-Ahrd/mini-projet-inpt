@@ -12,7 +12,7 @@ public interface ResultatPrelevementService {
     ResultatPrelevementDTO getResultatPrelevement(Long id) throws ResultatNotFoundException;
     void deleteResultatPrelevement(long id) throws ResultatNotFoundException;
     ResultatPrelevementResponseDTO getAllResultatPrelevement(int page, int size);
-    ResultatPrelevementResponseDTO getAllResultatPrelevementByPersonne(Long idPersonne, int page, int size) throws PersonneNotFoundException;
+    ResultatPrelevementResponseDTO getAllResultatPrelevementByPersonne(Long idPersonne, String kw, String numeroBA, String conforme, int page, int size) throws PersonneNotFoundException;
     ResultatPrelevementResponseDTO getAllResultatPrelevementByPersonneAndPrelevement(
-            Long idPersonne, int page, int size) throws PersonneNotFoundException;
+            Long idPersonne, String kw, String numeroBA, String conforme, int page, int size) throws PersonneNotFoundException;
 }

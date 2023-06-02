@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DetailNonConformiteRepository extends JpaRepository<DetailNonConformite, Long> {
     DetailNonConformite findByResultatPrel(ResultatPrelevement resultatPrelevement);
+    DetailNonConformite findByResultatPrelId(Long idResultat);
 }

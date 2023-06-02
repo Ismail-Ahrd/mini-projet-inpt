@@ -17,8 +17,13 @@ public interface PrelevementService {
     PrelevementDTO getPrelevement(Long id) throws PrelevementNotFoundException;
     void deletePrelevement(long id) throws PrelevementNotFoundException;
     PrelevementResponseDTO getAllPrelevement(String kw, EtatAvancement etat, int page, int size);
+    /*PrelevementResponseDTO getAllPrelevementByPersonne
+            (Long idPersonne,String kw, EtatAvancement etat, int page, int size) throws PersonneNotFoundException;*/
+
     PrelevementResponseDTO getAllPrelevementByPersonne
-            (Long idPersonne,String kw, EtatAvancement etat, int page, int size) throws PersonneNotFoundException;
+            (Long idPersonne, String kw, EtatAvancement etat, String numeroProcesVerbal, int page, int size)
+            throws PersonneNotFoundException;
+
     PrelevementResponseDTO getAllPrelevementByLabo
-            (Labo labo, String kw, EtatAvancement etat, int page, int size);
+            (Labo labo, String kw, EtatAvancement etat,String numeroProcesVerbal, int page, int size);
 }

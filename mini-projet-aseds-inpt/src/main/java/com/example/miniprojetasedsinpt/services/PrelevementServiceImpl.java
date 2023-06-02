@@ -16,7 +16,6 @@ import com.example.miniprojetasedsinpt.exceptions.ProduitNotFoundException;
 import com.example.miniprojetasedsinpt.mappers.PersonneMapper;
 import com.example.miniprojetasedsinpt.mappers.PrelevementMapper;
 import com.example.miniprojetasedsinpt.mappers.ProduitMapper;
-import com.example.miniprojetasedsinpt.repositories.PersonneRepository;
 import com.example.miniprojetasedsinpt.repositories.PrelevementRepository;
 import com.example.miniprojetasedsinpt.repositories.ProduitRepository;
 import lombok.RequiredArgsConstructor;
@@ -101,7 +100,7 @@ public class PrelevementServiceImpl implements PrelevementService {
         return prelevementResponseDTO;
     }
 
-    @Override
+    /*@Override
     public PrelevementResponseDTO getAllPrelevementByPersonne
             (Long idPersonne,String kw, EtatAvancement etat, int page, int size)
             throws PersonneNotFoundException {
@@ -109,8 +108,8 @@ public class PrelevementServiceImpl implements PrelevementService {
         PersonneDTO personneDTO = personneService.getPersonne(idPersonne);
         Personne personne = personneMapper.fromPersonneDTO(personneDTO);
 
-        /*Page<Prelevement> prelevementPages =
-                prelevementrepository.findByPersonne(personne, PageRequest.of(page, size));*/
+        *//*Page<Prelevement> prelevementPages =
+                prelevementrepository.findByPersonne(personne, PageRequest.of(page, size));*//*
         Page<Prelevement> prelevementPages = null;
         if (etat == null || etat.equals("")) {
             prelevementPages = prelevementrepository.findByPersonneAndProduitNomContainsOrderByDateEnvoieDesc(
@@ -132,17 +131,76 @@ public class PrelevementServiceImpl implements PrelevementService {
         prelevementResponseDTO.setTotalPages(prelevementPages.getTotalPages());
 
         return prelevementResponseDTO;
+    }*/
+    @Override
+    public PrelevementResponseDTO getAllPrelevementByPersonne(
+            Long idPersonne, String kw, EtatAvancement etat, String numeroProcesVerbal, int page, int size
+    ) throws PersonneNotFoundException {
+
+        PersonneDTO personneDTO = personneService.getPersonne(idPersonne);
+        Personne personne = personneMapper.fromPersonneDTO(personneDTO);
+
+        Integer numero = null;
+        if (numeroProcesVerbal != null && !numeroProcesVerbal.equals("")) {
+            numero = Integer.parseInt(numeroProcesVerbal);
+        }
+
+        Page<Prelevement> prelevementPages = null;
+        if ((etat == null || etat.equals("")) && (numeroProcesVerbal == null || numeroProcesVerbal.equals(""))) {
+            prelevementPages = prelevementrepository.findByPersonneAndProduitNomContainsOrderByDateEnvoieDesc(
+                    personne, kw, PageRequest.of(page, size));
+        } else if (numeroProcesVerbal == null || numeroProcesVerbal.equals("")){
+            prelevementPages= prelevementrepository.findByPersonneAndProduitNomContainsAndEtatAvancementOrderByDateEnvoieDesc(
+                    personne, kw, etat, PageRequest.of(page, size));
+        } else if (etat == null || etat.equals("")) {
+            prelevementPages= prelevementrepository.findByPersonneAndProduitNomContainsAndNumeroProcesVerbalOrderByDateEnvoieDesc(
+                    personne, kw, numero, PageRequest.of(page, size)
+            );
+        } else {
+            prelevementPages= prelevementrepository.findByPersonneAndProduitNomContainsAndEtatAvancementAndNumeroProcesVerbalOrderByDateEnvoieDesc(
+              personne, kw, etat, numero,PageRequest.of(page, size)
+            );
+        }
+
+
+        List<PrelevementDTO> prelevementDTOS = prelevementPages.stream()
+                .map(prelevement -> prelevementMapper.fromPrelevement(prelevement))
+                .collect(Collectors.toList());
+
+        PrelevementResponseDTO prelevementResponseDTO = new PrelevementResponseDTO();
+        prelevementResponseDTO.setPrelevementDTOS(prelevementDTOS);
+        prelevementResponseDTO.setCurrentPage(page);
+        prelevementResponseDTO.setPageSize(prelevementPages.getSize());
+        prelevementResponseDTO.setTotalPages(prelevementPages.getTotalPages());
+
+        return prelevementResponseDTO;
     }
 
     @Override
-    public PrelevementResponseDTO getAllPrelevementByLabo(Labo labo, String kw, EtatAvancement etat, int page, int size) {
+    public PrelevementResponseDTO getAllPrelevementByLabo(
+            Labo labo, String kw, EtatAvancement etat, String numeroProcesVerbal, int page, int size
+    ) {
+        Integer numero = null;
+        if (numeroProcesVerbal != null && !numeroProcesVerbal.equals("")) {
+            numero = Integer.parseInt(numeroProcesVerbal);
+        }
+
         Page<Prelevement> prelevementPages = null;
-        if (etat == null || etat.equals("")) {
+        if ((etat == null || etat.equals("")) && (numeroProcesVerbal == null || numeroProcesVerbal.equals(""))) {
             prelevementPages = prelevementrepository.findByLaboDestinationAndProduitNomContainsOrderByDateEnvoieDesc(
                     labo, kw, PageRequest.of(page, size));
+        } else if (etat == null || etat.equals("")) {
+            prelevementPages = prelevementrepository.findByLaboDestinationAndProduitNomContainsAndNumeroProcesVerbalOrderByDateEnvoieDesc(
+                    labo, kw, numero, PageRequest.of(page, size)
+            );
+        } else if (numeroProcesVerbal == null || numeroProcesVerbal.equals("")) {
+            prelevementPages = prelevementrepository.findByLaboDestinationAndProduitNomContainsAndEtatAvancementOrderByDateEnvoieDesc(
+                    labo, kw, etat, PageRequest.of(page, size)
+            );
         } else {
-            prelevementPages= prelevementrepository.findByLaboDestinationAndProduitNomContainsAndEtatAvancementOrderByDateEnvoieDesc(
-                    labo, kw, etat, PageRequest.of(page, size));
+            prelevementPages= prelevementrepository.findByLaboDestinationAndProduitNomContainsAndEtatAvancementAndNumeroProcesVerbalOrderByDateEnvoieDesc(
+                    labo, kw, etat, numero, PageRequest.of(page, size)
+            );
         }
 
         List<PrelevementDTO> prelevementDTOS = prelevementPages.stream()

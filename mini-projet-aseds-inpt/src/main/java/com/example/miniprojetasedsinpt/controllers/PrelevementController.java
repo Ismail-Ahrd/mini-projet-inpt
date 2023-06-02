@@ -70,13 +70,14 @@ public class PrelevementController {
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "5") int size,
             @RequestParam(name = "keyword", defaultValue = "") String keyword,
-            @RequestParam(name = "etat", defaultValue = "") EtatAvancement etatAvancement
+            @RequestParam(name = "etat", defaultValue = "") EtatAvancement etatAvancement,
+            @RequestParam(name = "numeroProcesVerbal", defaultValue = "") String numeroProcesVerbal
     ) throws PersonneNotFoundException
     {
         String authHeader = request.getHeader("Authorization");
         String jwt = authHeader.substring(7);
         Long idPersonne = jwtService.extractIdPersonne(jwt);
-        return prelevementSrevice.getAllPrelevementByPersonne(idPersonne, keyword, etatAvancement, page, size);
+        return prelevementSrevice.getAllPrelevementByPersonne(idPersonne, keyword, etatAvancement, numeroProcesVerbal, page, size);
     }
 
     @GetMapping("/labo")
@@ -85,7 +86,8 @@ public class PrelevementController {
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "5") int size,
             @RequestParam(name = "keyword", defaultValue = "") String keyword,
-            @RequestParam(name = "etat", defaultValue = "") EtatAvancement etatAvancement
+            @RequestParam(name = "etat", defaultValue = "") EtatAvancement etatAvancement,
+            @RequestParam(name = "numeroProcesVerbal", defaultValue = "") String numeroProcesVerbal
     ) throws PersonneNotFoundException
     {
         String authHeader = request.getHeader("Authorization");
@@ -95,10 +97,12 @@ public class PrelevementController {
         Labo labo;
         if(laboString.equals("LOARC")){
             labo = Labo.LOARC;
+            log.info(labo.name());
         }else {
             labo = Labo.LRAR;
+            log.info(labo.name());
         }
-        return prelevementSrevice.getAllPrelevementByLabo(labo, keyword, etatAvancement, page, size);
+        return prelevementSrevice.getAllPrelevementByLabo(labo, keyword, etatAvancement, numeroProcesVerbal, page, size);
     }
 
     @DeleteMapping("{id}")

@@ -26,6 +26,7 @@ public class ResultatPrelevementMapper {
         BeanUtils.copyProperties(resultatPrelevement, resultatPrelevementDTO);
         resultatPrelevementDTO.setIdPrelevement(resultatPrelevement.getPrelevement().getId());
         resultatPrelevementDTO.setIdPersonne(resultatPrelevement.getPersonne().getId());
+        resultatPrelevementDTO.setNomProduit(resultatPrelevement.getPrelevement().getProduit().getNom());
         return resultatPrelevementDTO;
     }
 

@@ -4,6 +4,7 @@ import com.example.miniprojetasedsinpt.dtos.PersonneDTO;
 import com.example.miniprojetasedsinpt.dtos.PrelevementDTO;
 import com.example.miniprojetasedsinpt.dtos.ResultatPrelevementDTO;
 import com.example.miniprojetasedsinpt.dtos.ResultatPrelevementResponseDTO;
+import com.example.miniprojetasedsinpt.entities.DetailNonConformite;
 import com.example.miniprojetasedsinpt.entities.Personne;
 import com.example.miniprojetasedsinpt.entities.Prelevement;
 import com.example.miniprojetasedsinpt.entities.ResultatPrelevement;
@@ -11,15 +12,18 @@ import com.example.miniprojetasedsinpt.entities.utils.EtatAvancement;
 import com.example.miniprojetasedsinpt.exceptions.*;
 import com.example.miniprojetasedsinpt.mappers.PersonneMapper;
 import com.example.miniprojetasedsinpt.mappers.ResultatPrelevementMapper;
+import com.example.miniprojetasedsinpt.repositories.DetailNonConformiteRepository;
 import com.example.miniprojetasedsinpt.repositories.PrelevementRepository;
 import com.example.miniprojetasedsinpt.repositories.ResultatPrelevementRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +36,7 @@ public class ResultatPrelevementServiceImpl implements ResultatPrelevementServic
     private final PersonneMapper personneMapper;
     private final PrelevementService prelevementService;
     private final PrelevementRepository prelevementRepository;
+    private final DetailNonConformiteRepository detailNonConformiteRepository;
 
     @Override
     public ResultatPrelevementDTO saveResultatPrelevement(ResultatPrelevementDTO resultatPrelevementDTO)
@@ -57,9 +62,18 @@ public class ResultatPrelevementServiceImpl implements ResultatPrelevementServic
 
     @Override
     public void deleteResultatPrelevement(long id) throws ResultatNotFoundException {
-        resultatPrelevementRepository.findById(id).orElseThrow(() ->
+        ResultatPrelevement resultat = resultatPrelevementRepository.findById(id).orElseThrow(() ->
             new ResultatNotFoundException("Ce resultat de  prelevement n'existe pas")
         );
+        Prelevement prelevement = prelevementRepository.findByResultatPrel(resultat);
+        prelevement.setEtatAvancement(EtatAvancement.EN_INSTANCE);
+        prelevementRepository.save(prelevement);
+
+        DetailNonConformite detail = detailNonConformiteRepository.findByResultatPrel(resultat);
+        if (detail != null) {
+            detailNonConformiteRepository.delete(detail);
+        }
+
         resultatPrelevementRepository.deleteById(id);
     }
 
@@ -81,10 +95,50 @@ public class ResultatPrelevementServiceImpl implements ResultatPrelevementServic
 
     @Override
     public ResultatPrelevementResponseDTO getAllResultatPrelevementByPersonne(
-            Long idPersonne, int page, int size) throws PersonneNotFoundException {
+            Long idPersonne, String kw, String numeroBA, String conforme, int page, int size) throws PersonneNotFoundException {
+
         Personne personne = personneMapper.fromPersonneDTO(personneService.getPersonne(idPersonne));
-        Page<ResultatPrelevement> resultatPages =
-                resultatPrelevementRepository.findByPersonne(personne, PageRequest.of(page, size));
+
+        Integer numero = null;
+        if (numeroBA != null && !numeroBA.equals("")) {
+            log.info("numero: " +numeroBA);
+            numero = Integer.parseInt(numeroBA);
+        }
+
+        Boolean conformité = null ;
+        if (conforme != null && !conforme.equals("")){
+            log.info("conforme "+ conforme);
+            if (conforme.equals("Oui")) {
+                log.info("conforme_Oui");
+                conformité= true;
+            } else {
+                log.info("conforme_Non");
+                conformité= false;
+            }
+        }
+
+        Page<ResultatPrelevement> resultatPages = null;
+        if ((numeroBA == null || numeroBA.equals("")) && (conforme == null || conforme.equals(""))) {
+            log.info("1");
+            resultatPages = resultatPrelevementRepository.findByPersonneAndPrelevement_Produit_NomContains(
+                    personne, kw, PageRequest.of(page, size)
+            );
+        } else if (numeroBA == null || numeroBA.equals("")) {
+            log.info("2");
+            resultatPages = resultatPrelevementRepository.findByPersonneAndPrelevement_Produit_NomContainsAndConforme(
+                    personne, kw, conformité, PageRequest.of(page, size)
+            );
+        } else if (conforme == null || conforme.equals("")) {
+            log.info("3");
+            resultatPages = resultatPrelevementRepository.findByPersonneAndPrelevement_Produit_NomContainsAndNumeroBA(
+                    personne, kw, numero, PageRequest.of(page, size)
+            );
+        } else {
+            log.info("4");
+            resultatPages = resultatPrelevementRepository.findByPersonneAndPrelevement_Produit_NomContainsAndNumeroBAAndConforme(
+                    personne, kw, numero, conformité, PageRequest.of(page, size)
+            );
+        }
 
         List<ResultatPrelevementDTO> resultatPrelevementDTOS = resultatPages.stream()
                 .map(resultat -> {
@@ -112,15 +166,57 @@ public class ResultatPrelevementServiceImpl implements ResultatPrelevementServic
 
     @Override
     public ResultatPrelevementResponseDTO getAllResultatPrelevementByPersonneAndPrelevement(
-            Long idPersonne,int page, int size) throws PersonneNotFoundException {
+            Long idPersonne, String kw, String numeroBA, String conforme, int page, int size) throws PersonneNotFoundException {
+
+        var ref1 = new Object() {
+            Integer numero = null;
+        };
+        if (numeroBA != null && !numeroBA.equals("")) {
+            ref1.numero = Integer.parseInt(numeroBA);
+        }
+
+        var ref = new Object() {
+            Boolean conformité = null;
+        };
+        if (conforme != null && !conforme.equals("")){
+            if (conforme.equals("Oui")) {
+                ref.conformité = true;
+            } else {
+                ref.conformité = false;
+            }
+        }
 
         PersonneDTO personneDTO = personneService.getPersonne(idPersonne);
         List<Prelevement> prelevements = prelevementRepository
                 .findByPersonne(personneMapper.fromPersonneDTO(personneDTO));
 
-        List<ResultatPrelevement> resultats = prelevements.stream()
-                .map(prelevement -> resultatPrelevementRepository.findByPrelevement(prelevement))
-                .collect(Collectors.toList());
+        List<ResultatPrelevement> resultats = null;
+        if ((numeroBA == null || numeroBA.equals("")) && (conforme == null || conforme.equals(""))) {
+            resultats = prelevements.stream()
+                    .map(prelevement -> resultatPrelevementRepository.findByPrelevementAndPrelevement_Produit_NomContains(
+                            prelevement,kw)
+                    )
+                    .collect(Collectors.toList());
+        } else if (numeroBA == null || numeroBA.equals("")) {
+            resultats = prelevements.stream()
+                    .map(prelevement -> resultatPrelevementRepository.findByPrelevementAndPrelevement_Produit_NomContainsAndConforme(
+                                prelevement,kw, ref.conformité)
+                    )
+                    .collect(Collectors.toList());
+        } else if (conforme == null || conforme.equals("")) {
+            resultats = prelevements.stream()
+                    .map(prelevement -> resultatPrelevementRepository.findByPrelevementAndPrelevement_Produit_NomContainsAndNumeroBA(
+                            prelevement, kw, ref1.numero)
+                    )
+                    .collect(Collectors.toList());
+        } else {
+            resultats = prelevements.stream()
+                    .map(prelevement -> resultatPrelevementRepository.findByPrelevementAndPrelevement_Produit_NomContainsAndNumeroBAAndConforme(
+                            prelevement, kw, ref1.numero, ref.conformité)
+                    )
+                    .collect(Collectors.toList());
+        }
+
         List<ResultatPrelevementDTO> resultatPrelevementDTOS = resultats.stream()
                 .map(resultatPrelevement -> {
                     if (resultatPrelevement != null) {

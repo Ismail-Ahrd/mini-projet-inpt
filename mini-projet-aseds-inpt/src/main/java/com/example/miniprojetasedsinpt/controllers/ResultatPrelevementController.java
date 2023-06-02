@@ -35,18 +35,25 @@ public class ResultatPrelevementController {
     public ResultatPrelevementResponseDTO getAllResultatPrelevementByPersonne(
             @PathVariable Long idPersonne,
             @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "5") int size) throws PersonneNotFoundException
-    {
-        return resultatPrelevementService.getAllResultatPrelevementByPersonne(idPersonne, page, size);
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "keyword", defaultValue = "") String kw,
+            @RequestParam(name = "numeroBA", defaultValue = "") String numeroBA,
+            @RequestParam(name = "conforme", defaultValue = "") String conforme
+    ) throws PersonneNotFoundException {
+        return resultatPrelevementService.getAllResultatPrelevementByPersonne(idPersonne,kw, numeroBA, conforme, page, size);
     }
 
     @GetMapping("/personne/prelevement/{idPersonne}")
     public ResultatPrelevementResponseDTO getAllResultatPrelevementByPersonneAndPrelevement(
             @PathVariable Long idPersonne,
             @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "5") int size) throws PersonneNotFoundException
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "keyword", defaultValue = "") String keyword,
+            @RequestParam(name = "numeroBA", defaultValue = "") String numeroBA,
+            @RequestParam(name = "conforme", defaultValue = "") String conforme
+    ) throws PersonneNotFoundException
     {
-        return resultatPrelevementService.getAllResultatPrelevementByPersonneAndPrelevement(idPersonne, page, size);
+        return resultatPrelevementService.getAllResultatPrelevementByPersonneAndPrelevement(idPersonne, keyword, numeroBA, conforme, page, size);
     }
 
     @GetMapping("/{id}")

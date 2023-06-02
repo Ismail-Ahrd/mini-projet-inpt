@@ -9,12 +9,14 @@ import com.example.miniprojetasedsinpt.mappers.DetailMapper;
 import com.example.miniprojetasedsinpt.mappers.ResultatPrelevementMapper;
 import com.example.miniprojetasedsinpt.repositories.DetailNonConformiteRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class DetailNonConformiteServiceImpl implements DetailNonConformiteService {
     private final DetailNonConformiteRepository detailNonConformiteRepository;
@@ -55,6 +57,9 @@ public class DetailNonConformiteServiceImpl implements DetailNonConformiteServic
         ResultatPrelevement resultatPrelevement = resultatMapper.fromResultatPrelevementDTO(resultatPrelevementDTO);
 
         DetailNonConformite detail = detailNonConformiteRepository.findByResultatPrel(resultatPrelevement);
+        if (detail == null) {
+            return null;
+        }
         return detailMapper.fromDetailNonConformite(detail);
     }
 }
